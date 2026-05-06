@@ -374,7 +374,7 @@
 <div class="hero">
   <div class="hero-badge">✦ Formulário Digital</div>
   <h1>Ficha de Matrícula e Ficha de Saúde.</h1>
-  <p>Preencha os dados abaixo. Ao finalizar.</p>
+  <p>Preencha os dados abaixo.</p>
 </div>
 
 <div class="progress-wrap">
@@ -385,9 +385,9 @@
 
 <div id="toast">✓ Dados enviados com sucesso!</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCMLUyF4C2HWsVZuzCa1S4LcLxGSghMG4Nw77YlPb_JKrKUZp9Nxt80V3rm0dAEoh-zw/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCMLUyF4C2HWsVZuzCa1S4LcLxGSghMG4Nw77YlPb_JKrKUZp9Nxt80V3rm0dAEoh-zw/exec'.trim();
 
 // ═══════════════════════════════════════════════════════════
 //  STEP DEFINITIONS
@@ -1078,8 +1078,9 @@ function blobToBase64(blob) {
 
 async function sendEnrollment() {
   const button = document.getElementById('sendBtn');
-  if (!APPS_SCRIPT_URL) {
-    showSendStatus('Envio ainda não configurado. Cole a URL do Google Apps Script na constante APPS_SCRIPT_URL.', 'error');
+  const endpoint = APPS_SCRIPT_URL.trim();
+  if (!endpoint) {
+    showSendStatus('Envio não configurado nesta versão carregada da página. Atualize o navegador e confira a constante APPS_SCRIPT_URL.', 'error');
     return;
   }
 
@@ -1087,6 +1088,10 @@ async function sendEnrollment() {
   showSendStatus('Gerando documento Word e enviando os dados...', 'loading');
 
   try {
+    if (typeof docx === 'undefined') {
+      throw new Error('A biblioteca DOCX não carregou. Verifique a internet ou abra a página pelo servidor local.');
+    }
+
     const doc = buildDoc();
     const blob = await docx.Packer.toBlob(doc);
     const fileName = makeFileName();
@@ -1099,7 +1104,7 @@ async function sendEnrollment() {
       data: { ...data }
     };
 
-    const response = await fetch(APPS_SCRIPT_URL, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
