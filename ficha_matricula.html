@@ -1076,6 +1076,207 @@ function blobToBase64(blob) {
   });
 }
 
+function escapeXml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
+}
+
+function templateValue(key) {
+  if (key === 'getdate') return today();
+  const value = data[key] || '';
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? fmtDate(value) : value;
+}
+
+async function buildTemplateDocxBlob() {
+  const templateBuffer = await fetch('template.docx').then(response => {
+    if (!response.ok) throw new Error('Modelo template.docx não encontrado.');
+    return response.arrayBuffer();
+  });
+
+  const zip = await ZipPackage.fromArrayBuffer(templateBuffer);
+  const xmlEntries = zip.entries.filter(entry =>
+    entry.name.startsWith('word/') && entry.name.endsWith('.xml')
+  );
+
+  if (!xmlEntries.length) {
+    throw new Error('O documento do Word não foi encontrado no modelo.');
+  }
+
+  for (const entry of xmlEntries) {
+    const xml = new TextDecoder().decode(entry.data);
+    const filledXml = xml.replace(/\{\{([^{}]+)\}\}/g, (_, rawKey) => {
+      const key = rawKey.trim();
+      return escapeXml(templateValue(key));
+    });
+    entry.data = new TextEncoder().encode(filledXml);
+  }
+
+  return new Blob([zip.toArrayBuffer()], {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  });
+}
+
+class ZipPackage {
+  constructor(entries) {
+    this.entries = entries;
+  }
+
+  static async fromArrayBuffer(buffer) {
+    const bytes = new Uint8Array(buffer);
+    const view = new DataView(buffer);
+    const eocdOffset = findEndOfCentralDirectory(bytes);
+    const centralDirectoryOffset = view.getUint32(eocdOffset + 16, true);
+    const entryCount = view.getUint16(eocdOffset + 10, true);
+    let offset = centralDirectoryOffset;
+    const entries = [];
+
+    for (let index = 0; index < entryCount; index += 1) {
+      if (view.getUint32(offset, true) !== 0x02014b50) {
+        throw new Error('Estrutura ZIP inválida.');
+      }
+
+      const method = view.getUint16(offset + 10, true);
+      const compressedSize = view.getUint32(offset + 20, true);
+      const uncompressedSize = view.getUint32(offset + 24, true);
+      const fileNameLength = view.getUint16(offset + 28, true);
+      const extraLength = view.getUint16(offset + 30, true);
+      const commentLength = view.getUint16(offset + 32, true);
+      const localHeaderOffset = view.getUint32(offset + 42, true);
+      const nameBytes = bytes.slice(offset + 46, offset + 46 + fileNameLength);
+      const name = new TextDecoder().decode(nameBytes);
+      const data = await readLocalEntry(bytes, localHeaderOffset, method, compressedSize, uncompressedSize);
+      entries.push({ name, data });
+      offset += 46 + fileNameLength + extraLength + commentLength;
+    }
+
+    return new ZipPackage(entries);
+  }
+
+  toArrayBuffer() {
+    const encoder = new TextEncoder();
+    const localParts = [];
+    const centralParts = [];
+    let offset = 0;
+
+    for (const entry of this.entries) {
+      const nameBytes = encoder.encode(entry.name);
+      const data = entry.data;
+      const crc = crc32(data);
+      const localHeader = new Uint8Array(30 + nameBytes.length);
+      const localView = new DataView(localHeader.buffer);
+      localView.setUint32(0, 0x04034b50, true);
+      localView.setUint16(4, 20, true);
+      localView.setUint16(6, 0x0800, true);
+      localView.setUint16(8, 0, true);
+      localView.setUint16(10, 0, true);
+      localView.setUint16(12, 0, true);
+      localView.setUint32(14, crc, true);
+      localView.setUint32(18, data.length, true);
+      localView.setUint32(22, data.length, true);
+      localView.setUint16(26, nameBytes.length, true);
+      localHeader.set(nameBytes, 30);
+      localParts.push(localHeader, data);
+
+      const centralHeader = new Uint8Array(46 + nameBytes.length);
+      const centralView = new DataView(centralHeader.buffer);
+      centralView.setUint32(0, 0x02014b50, true);
+      centralView.setUint16(4, 20, true);
+      centralView.setUint16(6, 20, true);
+      centralView.setUint16(8, 0x0800, true);
+      centralView.setUint16(10, 0, true);
+      centralView.setUint16(12, 0, true);
+      centralView.setUint16(14, 0, true);
+      centralView.setUint32(16, crc, true);
+      centralView.setUint32(20, data.length, true);
+      centralView.setUint32(24, data.length, true);
+      centralView.setUint16(28, nameBytes.length, true);
+      centralView.setUint32(42, offset, true);
+      centralHeader.set(nameBytes, 46);
+      centralParts.push(centralHeader);
+
+      offset += localHeader.length + data.length;
+    }
+
+    const centralDirectoryOffset = offset;
+    const centralDirectorySize = centralParts.reduce((sum, part) => sum + part.length, 0);
+    const eocd = new Uint8Array(22);
+    const eocdView = new DataView(eocd.buffer);
+    eocdView.setUint32(0, 0x06054b50, true);
+    eocdView.setUint16(8, this.entries.length, true);
+    eocdView.setUint16(10, this.entries.length, true);
+    eocdView.setUint32(12, centralDirectorySize, true);
+    eocdView.setUint32(16, centralDirectoryOffset, true);
+
+    return concatUint8Arrays([...localParts, ...centralParts, eocd]).buffer;
+  }
+}
+
+async function readLocalEntry(bytes, localHeaderOffset, method, compressedSize, uncompressedSize) {
+  const view = new DataView(bytes.buffer);
+  if (view.getUint32(localHeaderOffset, true) !== 0x04034b50) {
+    throw new Error('Cabeçalho ZIP inválido.');
+  }
+
+  const fileNameLength = view.getUint16(localHeaderOffset + 26, true);
+  const extraLength = view.getUint16(localHeaderOffset + 28, true);
+  const dataOffset = localHeaderOffset + 30 + fileNameLength + extraLength;
+  const compressed = bytes.slice(dataOffset, dataOffset + compressedSize);
+
+  if (method === 0) return compressed;
+  if (method !== 8) throw new Error('Método de compactação ZIP não suportado.');
+
+  const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  const result = new Uint8Array(await new Response(stream).arrayBuffer());
+  if (result.length !== uncompressedSize) throw new Error('Falha ao descompactar o modelo DOCX.');
+  return result;
+}
+
+function findEndOfCentralDirectory(bytes) {
+  for (let index = bytes.length - 22; index >= Math.max(0, bytes.length - 66000); index -= 1) {
+    if (
+      bytes[index] === 0x50 &&
+      bytes[index + 1] === 0x4b &&
+      bytes[index + 2] === 0x05 &&
+      bytes[index + 3] === 0x06
+    ) {
+      return index;
+    }
+  }
+  throw new Error('Arquivo DOCX inválido.');
+}
+
+function concatUint8Arrays(parts) {
+  const totalLength = parts.reduce((sum, part) => sum + part.length, 0);
+  const result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const part of parts) {
+    result.set(part, offset);
+    offset += part.length;
+  }
+  return result;
+}
+
+const CRC_TABLE = new Uint32Array(256);
+for (let index = 0; index < 256; index += 1) {
+  let value = index;
+  for (let bit = 0; bit < 8; bit += 1) {
+    value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+  }
+  CRC_TABLE[index] = value >>> 0;
+}
+
+function crc32(bytes) {
+  let crc = 0xffffffff;
+  for (const byte of bytes) {
+    crc = CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
 async function sendEnrollment() {
   const button = document.getElementById('sendBtn');
   const endpoint = APPS_SCRIPT_URL.trim();
@@ -1088,12 +1289,17 @@ async function sendEnrollment() {
   showSendStatus('Gerando documento Word e enviando os dados...', 'loading');
 
   try {
-    if (typeof docx === 'undefined') {
-      throw new Error('A biblioteca DOCX não carregou. Verifique a internet ou abra a página pelo servidor local.');
+    let blob;
+    try {
+      blob = await buildTemplateDocxBlob();
+    } catch (templateErr) {
+      if (typeof docx === 'undefined') {
+        throw new Error(`${templateErr.message} A biblioteca DOCX também não carregou para gerar o modelo simplificado.`);
+      }
+      const doc = buildDoc();
+      blob = await docx.Packer.toBlob(doc);
     }
 
-    const doc = buildDoc();
-    const blob = await docx.Packer.toBlob(doc);
     const fileName = makeFileName();
     const payload = {
       fileName,
