@@ -1289,16 +1289,7 @@ async function sendEnrollment() {
   showSendStatus('Gerando documento Word e enviando os dados...', 'loading');
 
   try {
-    let blob;
-    try {
-      blob = await buildTemplateDocxBlob();
-    } catch (templateErr) {
-      if (typeof docx === 'undefined') {
-        throw new Error(`${templateErr.message} A biblioteca DOCX também não carregou para gerar o modelo simplificado.`);
-      }
-      const doc = buildDoc();
-      blob = await docx.Packer.toBlob(doc);
-    }
+    const blob = await buildTemplateDocxBlob();
 
     const fileName = makeFileName();
     const payload = {
