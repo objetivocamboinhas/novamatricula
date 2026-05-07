@@ -388,6 +388,7 @@
 <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaB9Pm8iOW47JU2JfzalePWAVgZ-ApJMMrdhjE1wb9pFqWlJPM5oDWE2dX1se61m20FQ/exec'.trim();
+const TEMPLATE_VERSION = '7218127';
 
 // ═══════════════════════════════════════════════════════════
 //  STEP DEFINITIONS
@@ -1092,7 +1093,7 @@ function templateValue(key) {
 }
 
 async function buildTemplateDocxBlob() {
-  const templateBuffer = await fetch('template.docx').then(response => {
+  const templateBuffer = await fetch(`template.docx?v=${TEMPLATE_VERSION}`).then(response => {
     if (!response.ok) throw new Error('Modelo template.docx não encontrado.');
     return response.arrayBuffer();
   });
