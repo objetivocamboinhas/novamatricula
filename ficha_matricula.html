@@ -443,7 +443,7 @@ const STEPS = [
         { id:'aluno_turmairmao',   label:'Turma(s) do(s) irmão(s)', type:'text' },
       ]},
       { title: 'Endereço', fields: [
-        { id:'aluno_cep',          label:'CEP',                  type:'text',   placeholder:'00000-000' },
+        { id:'aluno_cep',          label:'CEP',                  type:'text',   placeholder:'00000-000', req:true, validate:'cep' },
         { id:'aluno_uf',           label:'Estado (UF)',          type:'text',   placeholder:'RJ' },
         { id:'aluno_cidade',       label:'Cidade',               type:'text' },
         { id:'aluno_bairro',       label:'Bairro',               type:'text' },
@@ -729,6 +729,8 @@ function validateField(el, type) {
       msgEl.textContent = isValid || !el.value.trim() ? '' : 'CPF inválido';
       msgEl.style.display = isValid || !el.value.trim() ? 'none' : 'block';
     }
+  } else if (type === 'cep') {
+    buscarCEP(el.value);
   }
 }
 
@@ -766,6 +768,28 @@ function updateTurmas() {
       data['turma'] = '';
       select.value = '';
     }
+  }
+}
+
+async function buscarCEP(cep) {
+  cep = cep.replace(/\D/g, '');
+  if (cep.length !== 8) return;
+  try {
+    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const dataCep = await response.json();
+    if (!dataCep.erro) {
+      data['aluno_endereco'] = dataCep.logradouro || '';
+      data['aluno_bairro'] = dataCep.bairro || '';
+      data['aluno_cidade'] = dataCep.localidade || '';
+      data['aluno_uf'] = dataCep.uf || '';
+      // update fields
+      document.getElementById('aluno_endereco').value = data['aluno_endereco'];
+      document.getElementById('aluno_bairro').value = data['aluno_bairro'];
+      document.getElementById('aluno_cidade').value = data['aluno_cidade'];
+      document.getElementById('aluno_uf').value = data['aluno_uf'];
+    }
+  } catch (error) {
+    console.error('Erro ao buscar CEP:', error);
   }
 }
 
