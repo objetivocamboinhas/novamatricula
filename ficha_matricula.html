@@ -423,7 +423,7 @@ const STEPS = [
         { id:'aluno_nomealuno',    label:'Nome completo',        type:'text',   req:true,  full:true },
         { id:'aluno_dtnascimento', label:'Data de nascimento',   type:'date',   req:true },
         { id:'aluno_sexo',         label:'Sexo',                 type:'select', options:['Masculino','Feminino','Outro'] },
-        { id:'aluno_cpf',          label:'CPF',                  type:'text',   placeholder:'000.000.000-00' },
+        { id:'aluno_cpf',          label:'CPF',                  type:'text',   placeholder:'000.000.000-00', validate:'cpf' },
         { id:'aluno_rg',           label:'RG',                   type:'text' },
         { id:'aluno_rgemissao',    label:'Data emissão RG',      type:'date' },
         { id:'aluno_rgexpedidor',  label:'Órgão expedidor',      type:'text',   placeholder:'SSP/RJ' },
@@ -463,7 +463,7 @@ const STEPS = [
       { title: 'Dados pessoais', fields: [
         { id:'filiacao1_nome',         label:'Nome completo',        type:'text',   req:true, full:true },
         { id:'filiacao1_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao1_cpf',          label:'CPF',                  type:'text' },
+        { id:'filiacao1_cpf',          label:'CPF',                  type:'text', validate:'cpf' },
         { id:'filiacao1_rg',           label:'RG / ID e emissor',    type:'text' },
         { id:'filiacao1_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileira' },
         { id:'filiacao1_civil',        label:'Estado civil',         type:'select', options:['Solteira','Casada','Divorciada','Viúva','União Estável','Outro'] },
@@ -489,7 +489,7 @@ const STEPS = [
       { title: 'Dados pessoais', fields: [
         { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true },
         { id:'filiacao2_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao2_cpf',          label:'CPF',                  type:'text' },
+        { id:'filiacao2_cpf',          label:'CPF',                  type:'text', validate:'cpf' },
         { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text' },
         { id:'filiacao2_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro' },
         { id:'filiacao2_civil',        label:'Estado civil',         type:'select', options:['Solteiro','Casado','Divorciado','Viúvo','União Estável','Outro'] },
@@ -514,7 +514,7 @@ const STEPS = [
     sections: [
       { title: 'Responsável Financeiro', fields: [
         { id:'respfinanceiro_nome',         label:'Nome completo',       type:'text',   req:true, full:true },
-        { id:'respfinanceiro_cpf',          label:'CPF',                 type:'text',   req:true },
+        { id:'respfinanceiro_cpf',          label:'CPF',                 type:'text',   req:true, validate:'cpf' },
         { id:'respfinanceiro_rg',           label:'RG',                  type:'text' },
         { id:'respfinanceiro_dtemissao',    label:'Data emissão RG',     type:'date' },
         { id:'respfinanceiro_expedidor',    label:'Órgão expedidor',     type:'text' },
@@ -536,7 +536,7 @@ const STEPS = [
       ]},
       { title: 'Responsável Acadêmico', fields: [
         { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true },
-        { id:'respacademico_cpf',          label:'CPF',                 type:'text' },
+        { id:'respacademico_cpf',          label:'CPF',                 type:'text', validate:'cpf' },
         { id:'respacademico_rg',           label:'RG',                  type:'text' },
         { id:'respacademico_dtemissao',    label:'Data emissão RG',     type:'date' },
         { id:'respacademico_expedidor',    label:'Órgão expedidor',     type:'text' },
@@ -565,22 +565,22 @@ const STEPS = [
           options:['Sozinho(a) após as atividades','Com transporte escolar contratado','Somente com responsável autorizado'] },
         { id:'condução_nome',     label:'Empresa de transporte',  type:'text' },
         { id:'condução_condutor', label:'Nome do condutor',       type:'text' },
-        { id:'condução_cpf',      label:'CPF do condutor',        type:'text' },
+        { id:'condução_cpf',      label:'CPF do condutor',        type:'text', validate:'cpf' },
         { id:'condução_aux',      label:'Nome do auxiliar',       type:'text' },
-        { id:'condução_cpfaux',   label:'CPF do auxiliar',        type:'text' },
+        { id:'condução_cpfaux',   label:'CPF do auxiliar',        type:'text', validate:'cpf' },
       ]},
       { title: 'Pessoas autorizadas a buscar', fields: [
         { id:'autoriza1',    label:'Nome — autorizado 1',       type:'text' },
         { id:'autoriza1p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza1cpf', label:'CPF',                       type:'text' },
+        { id:'autoriza1cpf', label:'CPF',                       type:'text', validate:'cpf' },
         { id:'autoriza1tel', label:'Telefone',                  type:'text' },
         { id:'autoriza2',    label:'Nome — autorizado 2',       type:'text' },
         { id:'autoriza2p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza2cpf', label:'CPF',                       type:'text' },
+        { id:'autoriza2cpf', label:'CPF',                       type:'text', validate:'cpf' },
         { id:'autoriza2tel', label:'Telefone',                  type:'text' },
         { id:'autoriza3',    label:'Nome — autorizado 3',       type:'text' },
         { id:'autoriza3p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza3cpf', label:'CPF',                       type:'text' },
+        { id:'autoriza3cpf', label:'CPF',                       type:'text', validate:'cpf' },
         { id:'autoriza3tel', label:'Telefone',                  type:'text' },
       ]},
       { title: 'Saúde', fields: [
@@ -678,13 +678,15 @@ function buildFields(fields) {
         input = `<div class="locked-value">${data[f.id] || ''}</div>`;
       } else {
         const opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
-        input = `<select id="${f.id}" onchange="save('${f.id}',this.value)"><option value="">— selecione —</option>${opts}</select>`;
+        input = `<select id="${f.id}" onchange="save('${f.id}',this.value)" ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''}><option value="">— selecione —</option>${opts}</select>`;
+        if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
       }
     } else if (f.type === 'textarea') {
-      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
+      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
+      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
     } else {
-      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} value="${data[f.id] || ''}" ${f.disabled ? 'readonly' : ''}>`;
-      if (f.req) input += `<span class="error-msg">Campo obrigatório</span>`;
+      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''} value="${data[f.id] || ''}" ${f.disabled ? 'readonly' : ''}>`;
+      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
     }
     const req = f.req ? `<span class="req">*</span>` : '';
     return `<div class="form-group ${cls}"><label for="${f.id}">${f.label}${req}</label>${input}</div>`;
@@ -695,6 +697,31 @@ function buildFields(fields) {
 //  NAVIGATION
 // ═══════════════════════════════════════════════════════════
 function save(id, val) { data[id] = val; }
+
+function validateField(el, type) {
+  if (type === 'cpf') {
+    const isValid = validateCPF(el.value);
+    el.classList.toggle('error', !isValid && el.value.trim());
+    const msgEl = el.parentNode.querySelector('.error-msg');
+    if (msgEl) {
+      msgEl.textContent = isValid || !el.value.trim() ? '' : 'CPF inválido';
+      msgEl.style.display = isValid || !el.value.trim() ? 'none' : 'block';
+    }
+  }
+}
+
+function validateCPF(cpf) {
+  cpf = cpf.replace(/[^\d]/g, '');
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) sum += parseInt(cpf[i]) * (10 - i);
+  let digit = (sum * 10) % 11 % 10;
+  if (digit !== parseInt(cpf[9])) return false;
+  sum = 0;
+  for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
+  digit = (sum * 10) % 11 % 10;
+  return digit === parseInt(cpf[10]);
+}
 
 function goTo(idx) {
   // validate required fields on current step before moving forward
@@ -708,6 +735,11 @@ function goTo(idx) {
         el.classList.add('error');
         valid = false;
       }
+    });
+    // check for validation errors
+    allFields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (el && el.classList.contains('error')) valid = false;
     });
     if (!valid) return;
   }
