@@ -338,16 +338,18 @@ async function generateDocx(event) {
     });
 
     const zip = await ZipPackage.fromArrayBuffer(templateBuffer);
-    const documentEntry = zip.entries.find((entry) => entry.name === "word/document.xml");
-    if (!documentEntry) throw new Error("O documento do Word nao foi encontrado no modelo.");
+    const xmlEntries = zip.entries.filter((entry) => entry.name.startsWith("word/") && entry.name.endsWith(".xml"));
+    if (!xmlEntries.length) throw new Error("O documento do Word nao foi encontrado no modelo.");
 
-    const xml = new TextDecoder().decode(documentEntry.data);
-    const filledXml = xml.replace(/\{\{([^{}]+)\}\}/g, (_, rawKey) => {
-      const key = rawKey.trim();
-      return escapeXml(formatDate(values[key] || ""));
-    });
+    for (const entry of xmlEntries) {
+      const xml = new TextDecoder().decode(entry.data);
+      const filledXml = xml.replace(/\{\{([^{}]+)\}\}/g, (_, rawKey) => {
+        const key = rawKey.trim();
+        return escapeXml(formatDate(values[key] || ""));
+      });
+      entry.data = new TextEncoder().encode(filledXml);
+    }
 
-    documentEntry.data = new TextEncoder().encode(filledXml);
     const output = zip.toArrayBuffer();
     downloadBlob(output, buildFileName(values));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
