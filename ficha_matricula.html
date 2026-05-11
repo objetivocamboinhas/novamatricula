@@ -411,6 +411,8 @@ const STEPS = [
     fields: [
       { id:'ano',         label:'Ano letivo',         type:'select', options:['2026'], req:true, disabled:true },
       { id:'TIPO',        label:'Tipo de matrícula',  type:'select', options:['Matrícula Nova'], req:true, disabled:true },
+      { id:'segmento',    label:'Segmento',          type:'select', options:['Educação Infantil','Ensino Fundamental I','Ensino Fundamental II','Ensino Médio'], req:true },
+      { id:'turma',       label:'Turma',             type:'select', options:[], req:true },
       { id:'TURNO',       label:'Turno',              type:'select', options:['Manhã','Tarde','Integral'], req:true },
       { id:'N_Matricula', label:'Nº da matrícula (secretaria)', type:'text', placeholder:'Uso da secretaria' },
     ]
@@ -435,8 +437,6 @@ const STEPS = [
         { id:'aluno_medicotel',    label:'Tel. do médico',       type:'text' },
       ]},
       { title: 'Escola e turma', fields: [
-        { id:'aluno_turma',        label:'Ano/Série',            type:'text',   req:true, placeholder:'Ex: 3º Ano EF' },
-        { id:'aluno_segmento',     label:'Segmento',             type:'select', options:['Educação Infantil','Ensino Fundamental I','Ensino Fundamental II','Ensino Médio'] },
         { id:'aluno_escoladeorigem',label:'Escola de origem',    type:'text' },
         { id:'aluno_irmao',        label:'Tem irmão(s) na escola?', type:'select', options:['Não','Sim'] },
         { id:'aluno_irmaoqt',      label:'Quantidade de irmãos', type:'text',   placeholder:'Se sim, quantos' },
@@ -619,6 +619,8 @@ let currentStep = 0;
 const data = {};
 data['ano'] = '2026';
 data['TIPO'] = 'Matrícula Nova';
+data['segmento'] = '';
+data['turma'] = '';
 
 // ═══════════════════════════════════════════════════════════
 //  BUILD UI
@@ -677,8 +679,28 @@ function buildFields(fields) {
       if (f.disabled) {
         input = `<div class="locked-value">${data[f.id] || ''}</div>`;
       } else {
-        const opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
-        input = `<select id="${f.id}" onchange="save('${f.id}',this.value)" ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''}><option value="">— selecione —</option>${opts}</select>`;
+        let opts;
+        let onchange = 'onchange="save(\'' + f.id + '\',this.value)"';
+        if (f.id === 'segmento') {
+          onchange = 'onchange="save(\'segmento\',this.value); updateTurmas();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'turma') {
+          const segmento = data['segmento'];
+          let turmas = [];
+          if (segmento === 'Educação Infantil') {
+            turmas = ['Maternal 1', 'Maternal 2', 'Jardim 1', 'Jardim 2', 'Jardim 3'];
+          } else if (segmento === 'Ensino Fundamental I') {
+            turmas = ['1º ANO', '2º ANO', '3º ANO', '4º ANO', '5º ANO'];
+          } else if (segmento === 'Ensino Fundamental II') {
+            turmas = ['6º ANO', '7º ANO', '8º ANO', '9º ANO'];
+          } else if (segmento === 'Ensino Médio') {
+            turmas = ['1º Série', '2º Série', '3º Série'];
+          }
+          opts = turmas.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else {
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        }
+        input = `<select id="${f.id}" ${onchange} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''}><option value="">— selecione —</option>${opts}</select>`;
         if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
       }
     } else if (f.type === 'textarea') {
@@ -721,6 +743,30 @@ function validateCPF(cpf) {
   for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
   digit = (sum * 10) % 11 % 10;
   return digit === parseInt(cpf[10]);
+}
+
+function updateTurmas() {
+  const segmento = data['segmento'];
+  let turmas = [];
+  if (segmento === 'Educação Infantil') {
+    turmas = ['Maternal 1', 'Maternal 2', 'Jardim 1', 'Jardim 2', 'Jardim 3'];
+  } else if (segmento === 'Ensino Fundamental I') {
+    turmas = ['1º ANO', '2º ANO', '3º ANO', '4º ANO', '5º ANO'];
+  } else if (segmento === 'Ensino Fundamental II') {
+    turmas = ['6º ANO', '7º ANO', '8º ANO', '9º ANO'];
+  } else if (segmento === 'Ensino Médio') {
+    turmas = ['1º Série', '2º Série', '3º Série'];
+  }
+  const select = document.getElementById('turma');
+  if (select) {
+    select.innerHTML = '<option value="">— selecione —</option>' + turmas.map(t => `<option value="${t}">${t}</option>`).join('');
+    if (data['turma'] && turmas.includes(data['turma'])) {
+      select.value = data['turma'];
+    } else {
+      data['turma'] = '';
+      select.value = '';
+    }
+  }
 }
 
 function goTo(idx) {
@@ -874,9 +920,9 @@ function buildDoc() {
       bold('Tipo Sang./RH: ',20), normal(v('aluno_tiposg')||'______',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Ano/Série: ',20), normal(v('aluno_turma')||'__________',20),
+      bold('Ano/Série: ',20), normal(v('turma')||'__________',20),
       normal('   ',20),
-      bold('Segmento: ',20), normal(v('aluno_segmento')||'_________________',20),
+      bold('Segmento: ',20), normal(v('segmento')||'_________________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
       bold('Escola de origem: ',20), normal(v('aluno_escoladeorigem')||'__________________________',20),
@@ -1017,7 +1063,7 @@ function buildDoc() {
     ], spacing:{after:60} }),
     new Paragraph({ children:[
       bold('Nome do(a) Aluno(a): ',20), normal(v('aluno_nomealuno')||'__________________________',20),
-      normal('   Série/Turma: ',20), normal(v('aluno_turma')||'_______',20),
+      normal('   Série/Turma: ',20), normal(v('turma')||'_______',20),
     ], spacing:{after:120} }),
     new Paragraph({ children:[ bold('Autorizo que o(a) aluno(a) saia: ',20), normal(v('SAIDA')||'_________________________________',20) ], spacing:{after:200} }),
 
