@@ -211,6 +211,17 @@
   input.error + .error-msg { display: block; }
   select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; cursor: pointer; }
   textarea { resize: vertical; min-height: 80px; }
+  .locked-value {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    opacity: 0.7;
+  }
 
   /* ── section divider ── */
   .sub-section {
@@ -663,12 +674,16 @@ function buildFields(fields) {
     const cls = f.full ? 'full' : f.half ? 'half' : '';
     let input;
     if (f.type === 'select') {
-      const opts = f.options.map(o => `<option value="${o}">${o}</option>`).join('');
-      input = `<select id="${f.id}" onchange="save('${f.id}',this.value)" value="${data[f.id] || ''}" ${f.disabled ? 'disabled' : ''}><option value="">— selecione —</option>${opts}</select>`;
+      if (f.disabled) {
+        input = `<div class="locked-value">${data[f.id] || ''}</div>`;
+      } else {
+        const opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        input = `<select id="${f.id}" onchange="save('${f.id}',this.value)"><option value="">— selecione —</option>${opts}</select>`;
+      }
     } else if (f.type === 'textarea') {
-      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" oninput="save('${f.id}',this.value)" ${f.disabled ? 'disabled' : ''}>${data[f.id] || ''}</textarea>`;
+      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
     } else {
-      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} oninput="save('${f.id}',this.value)" value="${data[f.id] || ''}" ${f.disabled ? 'disabled' : ''}>`;
+      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} value="${data[f.id] || ''}" ${f.disabled ? 'readonly' : ''}>`;
       if (f.req) input += `<span class="error-msg">Campo obrigatório</span>`;
     }
     const req = f.req ? `<span class="req">*</span>` : '';
