@@ -1584,10 +1584,13 @@ async function buildTemplateDocxBlob() {
 
   for (const entry of xmlEntries) {
     const xml = new TextDecoder().decode(entry.data);
-    const filledXml = xml.replace(/\{\{([^{}]+)\}\}/g, (_, rawKey) => {
-      const key = rawKey.trim();
-      return escapeXml(templateValue(key));
-    });
+    const filledXml = xml
+      // Word fragmenta {{chave}} em múltiplos runs XML — une os fragmentos antes de substituir
+      .replace(/\{\{(?:[^{}<>]|<[^>]*>)*?\}\}/g, match => match.replace(/<[^>]+>/g, ''))
+      .replace(/\{\{([^{}]+)\}\}/g, (_, rawKey) => {
+        const key = rawKey.trim();
+        return escapeXml(templateValue(key));
+      });
     entry.data = new TextEncoder().encode(filledXml);
   }
 
