@@ -531,7 +531,7 @@ const STEPS = [
     desc: 'Dados do pai / filiação 2',
     sections: [
       { title: 'Dados pessoais', fields: [
-        { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true },
+        { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true, req:true },
         { id:'filiacao2_dtnascimento', label:'Data de nascimento',   type:'date' },
         { id:'filiacao2_cpf',          label:'CPF',                  type:'text', validate:'cpf', req:true },
         { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text' },
@@ -580,7 +580,7 @@ const STEPS = [
         { id:'mesmo_responsavel',           label:'O responsável financeiro também é responsável acadêmico', type:'checkbox' },
       ]},
       { title: 'Responsável Acadêmico', fields: [
-        { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true },
+        { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true, req:true },
         { id:'respacademico_cpf',          label:'CPF',                 type:'text', validate:'cpf' },
         { id:'respacademico_rg',           label:'RG',                  type:'text' },
         { id:'respacademico_dtemissao',    label:'Data emissão RG',     type:'date' },
@@ -606,7 +606,7 @@ const STEPS = [
     desc: 'Autorização de saída e informações de saúde',
     sections: [
       { title: 'Autorização de saída', fields: [
-        { id:'SAIDA', label:'Tipo de saída autorizada', type:'select', full:true,
+        { id:'SAIDA', label:'Tipo de saída autorizada', type:'select', full:true, req:true,
           options:['Sozinho(a) após as atividades','Com transporte escolar contratado','Somente com responsável autorizado'] },
         { id:'condução_nome',     label:'Empresa de transporte',  type:'text' },
         { id:'condução_condutor', label:'Nome do condutor',       type:'text' },
@@ -615,15 +615,15 @@ const STEPS = [
         { id:'condução_cpfaux',   label:'CPF do auxiliar',        type:'text', validate:'cpf', req:true },
       ]},
       { title: 'Pessoas autorizadas a buscar', fields: [
-        { id:'autoriza1',    label:'Nome — autorizado 1',       type:'text' },
+        { id:'autoriza1',    label:'Nome — autorizado 1',       type:'text', req:true },
         { id:'autoriza1p',   label:'Parentesco',                type:'text' },
         { id:'autoriza1cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
         { id:'autoriza1tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
-        { id:'autoriza2',    label:'Nome — autorizado 2',       type:'text' },
+        { id:'autoriza2',    label:'Nome — autorizado 2',       type:'text', req:true },
         { id:'autoriza2p',   label:'Parentesco',                type:'text' },
         { id:'autoriza2cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
         { id:'autoriza2tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
-        { id:'autoriza3',    label:'Nome — autorizado 3',       type:'text' },
+        { id:'autoriza3',    label:'Nome — autorizado 3',       type:'text', req:true },
         { id:'autoriza3p',   label:'Parentesco',                type:'text' },
         { id:'autoriza3cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
         { id:'autoriza3tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
