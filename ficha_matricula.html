@@ -206,9 +206,9 @@
     background: white;
     box-shadow: 0 0 0 3px rgba(74,143,232,0.15);
   }
-  input.error { border-color: var(--error); }
+  input.error, select.error, textarea.error { border-color: var(--error); }
   .error-msg { font-size: 11px; color: var(--error); display: none; }
-  input.error + .error-msg { display: block; }
+  input.error + .error-msg, select.error + .error-msg, textarea.error + .error-msg { display: block; }
   select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; cursor: pointer; }
   textarea { resize: vertical; min-height: 80px; }
   .locked-value {
@@ -221,6 +221,54 @@
     color: var(--text);
     background: var(--bg);
     opacity: 0.7;
+  }
+
+  /* ── checkbox ── */
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--mid);
+    margin-right: 8px;
+  }
+  .form-group label {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── checkbox banner (mesmo responsável) ── */
+  .checkbox-banner {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 2px solid var(--mid);
+    border-radius: 8px;
+    background: #f0f4ff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    margin: 6px 0;
+    user-select: none;
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 14px;
+  }
+  .checkbox-banner:hover {
+    background: #dce6ff;
+    box-shadow: 0 2px 8px rgba(26,58,124,0.12);
+  }
+  .checkbox-banner.checked {
+    background: #1a3a7c;
+    border-color: #1a3a7c;
+    color: #fff;
+  }
+  .checkbox-banner input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: #fff;
   }
 
   /* ── section divider ── */
@@ -407,7 +455,7 @@ const TEMPLATE_VERSION = '7218127';
 const STEPS = [
   {
     id: 'matricula', label: 'Matrícula', icon: '🏫',
-    desc: 'Informações do ano letivo e turma',
+    desc: 'mInformações do ano letivo e turma',
     fields: [
       { id:'ano',         label:'Ano letivo',         type:'select', options:['2026'], req:true, disabled:true },
       { id:'TIPO',        label:'Tipo de matrícula',  type:'select', options:['Matrícula Nova'], req:true, disabled:true },
@@ -419,66 +467,62 @@ const STEPS = [
   },
   {
     id: 'aluno', label: 'Aluno(a)', icon: '👦',
-    desc: 'Dados pessoais do(a) aluno(a)',
+    desc: 'Preencha com os dados pessoais do(a) aluno(a)',
     sections: [
       { title: 'Identificação', fields: [
         { id:'aluno_nomealuno',    label:'Nome completo',        type:'text',   req:true,  full:true },
         { id:'aluno_dtnascimento', label:'Data de nascimento',   type:'date',   req:true },
-        { id:'aluno_sexo',         label:'Sexo',                 type:'select', options:['Masculino','Feminino','Outro'] },
-        { id:'aluno_cpf',          label:'CPF',                  type:'text',   placeholder:'000.000.000-00', validate:'cpf' },
-        { id:'aluno_rg',           label:'RG',                   type:'text' },
-        { id:'aluno_rgemissao',    label:'Data emissão RG',      type:'date' },
-        { id:'aluno_rgexpedidor',  label:'Órgão expedidor',      type:'text',   placeholder:'SSP/RJ' },
+        { id:'aluno_sexo',         label:'Sexo',                 type:'select', options:['Masculino','Feminino','Outro'], req:true },
+        { id:'aluno_cpf',          label:'CPF',                  type:'text',   placeholder:'000.000.000-00', validate:'cpf', req:true },
+        { id:'aluno_rg',           label:'RG',                   type:'text', req:true },
+        { id:'aluno_rgemissao',    label:'Data emissão RG',      type:'date', req:true },
+        { id:'aluno_rgexpedidor',  label:'Órgão expedidor',      type:'text',   placeholder:'SSP/RJ', req:true },
         { id:'aluno_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro(a)' },
-        { id:'aluno_tiposg',       label:'Tipo sanguíneo e Fator RH', type:'select', options:['A+','A-','B+','B-','AB+','AB-','O+','O-','Não sei'] },
-        { id:'aluno_planodesaude', label:'Plano de saúde',       type:'text' },
-        { id:'aluno_planonumero',  label:'Nº carteira do plano', type:'text' },
-        { id:'aluno_medico',       label:'Médico responsável',   type:'text' },
-        { id:'aluno_medicotel',    label:'Tel. do médico',       type:'text' },
+        { id:'aluno_tiposg',       label:'Tipo sanguíneo e Fator RH', type:'select', options:['A+','A-','B+','B-','AB+','AB-','O+','O-','Não sei'], req:true },
       ]},
       { title: 'Escola e turma', fields: [
         { id:'aluno_escoladeorigem',label:'Escola de origem',    type:'text' },
-        { id:'aluno_irmao',        label:'Tem irmão(s) na escola?', type:'select', options:['Não','Sim'] },
+        { id:'aluno_irmao',        label:'Tem irmão(s) na escola?', type:'select', options:['Não','Sim'], req:true },
         { id:'aluno_irmaoqt',      label:'Quantidade de irmãos', type:'text',   placeholder:'Se sim, quantos' },
         { id:'aluno_turmairmao',   label:'Turma(s) do(s) irmão(s)', type:'text' },
       ]},
       { title: 'Endereço', fields: [
         { id:'aluno_cep',          label:'CEP',                  type:'text',   placeholder:'00000-000', req:true, validate:'cep' },
-        { id:'aluno_uf',           label:'Estado (UF)',          type:'text',   placeholder:'RJ' },
-        { id:'aluno_cidade',       label:'Cidade',               type:'text' },
-        { id:'aluno_bairro',       label:'Bairro',               type:'text' },
-        { id:'aluno_endereco',     label:'Endereço',             type:'text',   half:true },
-        { id:'numero',             label:'Número',               type:'text' },
-        { id:'aluno_email',        label:'E-mail',               type:'email' },
-        { id:'aluno_cel',          label:'Celular',              type:'text' },
-        { id:'aluno_residencial',  label:'Tel. residencial',     type:'text' },
-        { id:'aluno_reside',       label:'Reside com',           type:'select', options:['Pais','Mãe','Pai','Responsável','Avós','Outro'] },
+        { id:'aluno_uf',           label:'Estado (UF)',          type:'text',   placeholder:'RJ', req:true },
+        { id:'aluno_cidade',       label:'Cidade',               type:'text', req:true },
+        { id:'aluno_bairro',       label:'Bairro',               type:'text', req:true },
+        { id:'aluno_endereco',     label:'Endereço',             type:'text',   half:true, req:true },
+        { id:'numero',             label:'Número',               type:'text', req:true },
+        { id:'aluno_email',        label:'E-mail',               type:'email', validate:'email', req:true },
+        { id:'aluno_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
+        { id:'aluno_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
+        { id:'aluno_reside',       label:'Reside com',           type:'select', options:['Pais','Mãe','Pai','Responsável','Avós','Outro'], req:true },
       ]},
     ]
   },
   {
     id: 'mae', label: 'Filiação 1', icon: '👩',
-    desc: 'Dados da mãe / filiação 1',
+    desc: 'Preencha os dados da mãe do aluno(a)',
     sections: [
       { title: 'Dados pessoais', fields: [
         { id:'filiacao1_nome',         label:'Nome completo',        type:'text',   req:true, full:true },
         { id:'filiacao1_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao1_cpf',          label:'CPF',                  type:'text', validate:'cpf' },
+        { id:'filiacao1_cpf',          label:'CPF',                  type:'text', validate:'cpf', req:true },
         { id:'filiacao1_rg',           label:'RG / ID e emissor',    type:'text' },
         { id:'filiacao1_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileira' },
         { id:'filiacao1_civil',        label:'Estado civil',         type:'select', options:['Solteira','Casada','Divorciada','Viúva','União Estável','Outro'] },
         { id:'filiacao1_ocupacao',     label:'Ocupação',             type:'text' },
       ]},
       { title: 'Contato e endereço', fields: [
-        { id:'filiacao1_cel',          label:'Celular',              type:'text' },
-        { id:'filiacao1_residencial',  label:'Tel. residencial',     type:'text' },
-        { id:'filiacao1_comercial',    label:'Tel. comercial',       type:'text' },
-        { id:'filiacao1_email',        label:'E-mail',               type:'email', half:true },
-        { id:'filiacao1_cep',          label:'CEP',                  type:'text' },
-        { id:'filiacao1_uf',           label:'Estado (UF)',          type:'text' },
-        { id:'filiacao1_municipio',    label:'Município',            type:'text' },
-        { id:'filiacao1_bairro',       label:'Bairro',               type:'text' },
-        { id:'filiacao1_endereco',     label:'Endereço',             type:'text',  half:true },
+        { id:'filiacao1_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
+        { id:'filiacao1_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
+        { id:'filiacao1_comercial',    label:'Tel. comercial',       type:'text', validate:'phone', req:true },
+        { id:'filiacao1_email',        label:'E-mail',               type:'email', half:true, validate:'email' },
+        { id:'filiacao1_cep',          label:'CEP',                  type:'text', req:true, validate:'cep' },
+        { id:'filiacao1_uf',           label:'Estado (UF)',          type:'text', req:true },
+        { id:'filiacao1_municipio',    label:'Município',            type:'text', req:true },
+        { id:'filiacao1_bairro',       label:'Bairro',               type:'text', req:true },
+        { id:'filiacao1_endereco',     label:'Endereço',             type:'text',  half:true, req:true },
       ]},
     ]
   },
@@ -489,22 +533,22 @@ const STEPS = [
       { title: 'Dados pessoais', fields: [
         { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true },
         { id:'filiacao2_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao2_cpf',          label:'CPF',                  type:'text', validate:'cpf' },
+        { id:'filiacao2_cpf',          label:'CPF',                  type:'text', validate:'cpf', req:true },
         { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text' },
         { id:'filiacao2_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro' },
         { id:'filiacao2_civil',        label:'Estado civil',         type:'select', options:['Solteiro','Casado','Divorciado','Viúvo','União Estável','Outro'] },
         { id:'filiacao2_ocupacao',     label:'Ocupação',             type:'text' },
       ]},
       { title: 'Contato e endereço', fields: [
-        { id:'filiacao2_cel',          label:'Celular',              type:'text' },
-        { id:'filiacao2_residencial',  label:'Tel. residencial',     type:'text' },
-        { id:'filiacao2_comercial',    label:'Tel. comercial',       type:'text' },
-        { id:'filiacao2_email',        label:'E-mail',               type:'email', half:true },
-        { id:'filiacao2_cep',          label:'CEP',                  type:'text' },
-        { id:'filiacao2_uf',           label:'Estado (UF)',          type:'text' },
-        { id:'filiacao2_municipio',    label:'Município',            type:'text' },
-        { id:'filiacao2_bairro',       label:'Bairro',               type:'text' },
-        { id:'filiacao2_endereco',     label:'Endereço',             type:'text',  half:true },
+        { id:'filiacao2_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
+        { id:'filiacao2_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
+        { id:'filiacao2_comercial',    label:'Tel. comercial',       type:'text', validate:'phone', req:true },
+        { id:'filiacao2_email',        label:'E-mail',               type:'email', half:true, validate:'email' },
+        { id:'filiacao2_cep',          label:'CEP',                  type:'text', req:true, validate:'cep' },
+        { id:'filiacao2_uf',           label:'Estado (UF)',          type:'text', req:true },
+        { id:'filiacao2_municipio',    label:'Município',            type:'text', req:true },
+        { id:'filiacao2_bairro',       label:'Bairro',               type:'text', req:true },
+        { id:'filiacao2_endereco',     label:'Endereço',             type:'text',  half:true, req:true },
       ]},
     ]
   },
@@ -524,15 +568,16 @@ const STEPS = [
         { id:'respfinanceiro_estadocivil',  label:'Estado civil',        type:'select', options:['Solteiro(a)','Casado(a)','Divorciado(a)','Viúvo(a)','União Estável','Outro'] },
         { id:'respfinanceiro_ocupacao',     label:'Ocupação',            type:'text' },
         { id:'respfinanceiro_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
-        { id:'respfinanceiro_cep',          label:'CEP',                 type:'text' },
-        { id:'respfinanceiro_uf',           label:'Estado (UF)',         type:'text' },
-        { id:'respfinanceiro_cidade',       label:'Cidade',              type:'text' },
-        { id:'respfinanceiro_bairro',       label:'Bairro',              type:'text' },
-        { id:'respfinanceiro_endereco',     label:'Endereço',            type:'text',  half:true },
+        { id:'respfinanceiro_cep',          label:'CEP',                 type:'text', req:true, validate:'cep' },
+        { id:'respfinanceiro_uf',           label:'Estado (UF)',         type:'text', req:true },
+        { id:'respfinanceiro_cidade',       label:'Cidade',              type:'text', req:true },
+        { id:'respfinanceiro_bairro',       label:'Bairro',              type:'text', req:true },
+        { id:'respfinanceiro_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respfinanceiro_numero',       label:'Número',              type:'text' },
-        { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true },
-        { id:'respfinanceiro_residencial',  label:'Tel. residencial',    type:'text' },
-        { id:'respfinanceiro_cel',          label:'Tel. celular',        type:'text' },
+        { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true, validate:'email' },
+        { id:'respfinanceiro_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
+        { id:'respfinanceiro_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
+        { id:'mesmo_responsavel',           label:'O responsável financeiro também é responsável acadêmico', type:'checkbox' },
       ]},
       { title: 'Responsável Acadêmico', fields: [
         { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true },
@@ -544,15 +589,15 @@ const STEPS = [
         { id:'respacademico_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
         { id:'respacademico_ocupacao',     label:'Ocupação',            type:'text' },
         { id:'respacademico_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
-        { id:'respacademico_cep',          label:'CEP',                 type:'text' },
-        { id:'respacademico_uf',           label:'Estado (UF)',         type:'text' },
-        { id:'respacademico_cidade',       label:'Cidade',              type:'text' },
-        { id:'respacademico_bairro',       label:'Bairro',              type:'text' },
-        { id:'respacademico_endereco',     label:'Endereço',            type:'text',  half:true },
+        { id:'respacademico_cep',          label:'CEP',                 type:'text', req:true, validate:'cep' },
+        { id:'respacademico_uf',           label:'Estado (UF)',         type:'text', req:true },
+        { id:'respacademico_cidade',       label:'Cidade',              type:'text', req:true },
+        { id:'respacademico_bairro',       label:'Bairro',              type:'text', req:true },
+        { id:'respacademico_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respacademico_numero',       label:'Número',              type:'text' },
-        { id:'respacademico_email',        label:'E-mail',              type:'email', half:true },
-        { id:'respacademico_residencial',  label:'Tel. residencial',    type:'text' },
-        { id:'respacademico_cel',          label:'Tel. celular',        type:'text' },
+        { id:'respacademico_email',        label:'E-mail',              type:'email', half:true, validate:'email' },
+        { id:'respacademico_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
+        { id:'respacademico_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
       ]},
     ]
   },
@@ -565,29 +610,39 @@ const STEPS = [
           options:['Sozinho(a) após as atividades','Com transporte escolar contratado','Somente com responsável autorizado'] },
         { id:'condução_nome',     label:'Empresa de transporte',  type:'text' },
         { id:'condução_condutor', label:'Nome do condutor',       type:'text' },
-        { id:'condução_cpf',      label:'CPF do condutor',        type:'text', validate:'cpf' },
+        { id:'condução_cpf',      label:'CPF do condutor',        type:'text', validate:'cpf', req:true },
         { id:'condução_aux',      label:'Nome do auxiliar',       type:'text' },
-        { id:'condução_cpfaux',   label:'CPF do auxiliar',        type:'text', validate:'cpf' },
+        { id:'condução_cpfaux',   label:'CPF do auxiliar',        type:'text', validate:'cpf', req:true },
       ]},
       { title: 'Pessoas autorizadas a buscar', fields: [
         { id:'autoriza1',    label:'Nome — autorizado 1',       type:'text' },
         { id:'autoriza1p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza1cpf', label:'CPF',                       type:'text', validate:'cpf' },
-        { id:'autoriza1tel', label:'Telefone',                  type:'text' },
+        { id:'autoriza1cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
+        { id:'autoriza1tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
         { id:'autoriza2',    label:'Nome — autorizado 2',       type:'text' },
         { id:'autoriza2p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza2cpf', label:'CPF',                       type:'text', validate:'cpf' },
-        { id:'autoriza2tel', label:'Telefone',                  type:'text' },
+        { id:'autoriza2cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
+        { id:'autoriza2tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
         { id:'autoriza3',    label:'Nome — autorizado 3',       type:'text' },
         { id:'autoriza3p',   label:'Parentesco',                type:'text' },
-        { id:'autoriza3cpf', label:'CPF',                       type:'text', validate:'cpf' },
-        { id:'autoriza3tel', label:'Telefone',                  type:'text' },
+        { id:'autoriza3cpf', label:'CPF',                       type:'text', validate:'cpf', req:true },
+        { id:'autoriza3tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
       ]},
       { title: 'Saúde', fields: [
-        { id:'aluno_planodesaude',  label:'Plano de saúde',          type:'text' },
+        { id:'aluno_planodesaude',  label:'Plano de saúde',          type:'select', options:[
+          'Hapvida / NotreDame Intermédica',
+          'Bradesco Saúde',
+          'Amil',
+          'SulAmérica Saúde',
+          'Unimed',
+          'Seguros Unimed',
+          'Porto Seguro Saúde',
+          'Prevent Senior',
+          'Assim Saúde'
+        ], req:true },
         { id:'aluno_planonumero',   label:'Nº da carteira',          type:'text' },
         { id:'aluno_medico',        label:'Médico responsável',      type:'text' },
-        { id:'aluno_medicotel',     label:'Tel. do médico',          type:'text' },
+        { id:'aluno_medicotel',     label:'Tel. do médico',          type:'text', validate:'phone', req:true },
         { id:'medicamentosn',       label:'Uso regular de remédio?', type:'select', options:['Não','Sim'] },
         { id:'aluno_medicamento',   label:'Qual(is) remédio(s)',     type:'text' },
         { id:'alergicosn',          label:'É alérgico(a)?',          type:'select', options:['Não','Sim'] },
@@ -598,10 +653,10 @@ const STEPS = [
       { title: 'Contatos de emergência', fields: [
         { id:'parentesco1_nome', label:'Nome — contato 1',       type:'text' },
         { id:'parentesco1_tipo', label:'Parentesco',             type:'text' },
-        { id:'parentesco1_tel',  label:'Telefone',               type:'text' },
+        { id:'parentesco1_tel',  label:'Telefone',               type:'text', validate:'phone', req:true },
         { id:'parentesco2_nome', label:'Nome — contato 2',       type:'text' },
         { id:'parentesco2_tipo', label:'Parentesco',             type:'text' },
-        { id:'parentesco2_cel',  label:'Telefone',               type:'text' },
+        { id:'parentesco2_cel',  label:'Telefone',               type:'text', validate:'phone', req:true },
       ]},
     ]
   },
@@ -651,8 +706,9 @@ function buildPanels() {
     } else if (s.fields) {
       html += `<div class="form-grid">${buildFields(s.fields)}</div>`;
     } else if (s.sections) {
-      s.sections.forEach(sec => {
-        html += `<div class="${sec !== s.sections[0] ? 'sub-section' : ''}"><div class="sub-title">${sec.title}</div><div class="form-grid">${buildFields(sec.fields)}</div></div>`;
+      s.sections.forEach((sec, sidx) => {
+        const sectionId = `section-${s.id}-${sidx}`;
+        html += `<div class="${sec !== s.sections[0] ? 'sub-section' : ''}" id="${sectionId}"><div class="sub-title">${sec.title}</div><div class="form-grid">${buildFields(sec.fields)}</div></div>`;
       });
     }
 
@@ -684,6 +740,9 @@ function buildFields(fields) {
         if (f.id === 'segmento') {
           onchange = 'onchange="save(\'segmento\',this.value); updateTurmas();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'SAIDA') {
+          onchange = 'onchange="save(\'SAIDA\',this.value); updateSaidaVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'turma') {
           const segmento = data['segmento'];
           let turmas = [];
@@ -700,15 +759,28 @@ function buildFields(fields) {
         } else {
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         }
-        input = `<select id="${f.id}" ${onchange} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''}><option value="">— selecione —</option>${opts}</select>`;
-        if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
+        const selectOnblur = f.req ? 'onblur="validateRequired(this)"' : (f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : '');
+        input = `<select id="${f.id}" ${onchange} ${selectOnblur}><option value="">— selecione —</option>${opts}</select>`;
+        if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ' '}</span>`;
       }
     } else if (f.type === 'textarea') {
-      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
-      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
+      const textareaOnblur = f.req ? 'onblur="validateRequired(this)"' : (f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : '');
+      input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${textareaOnblur} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
+      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ' '}</span>`;
+    } else if (f.type === 'checkbox') {
+      const checked = data[f.id] ? 'checked' : '';
+      const bannerClass = data[f.id] ? 'checked' : '';
+      return `<label class="checkbox-banner ${bannerClass}" id="banner_${f.id}">
+        <input type="checkbox" id="${f.id}" ${checked} onchange="save('${f.id}', this.checked); toggleAcademicoSection(); document.getElementById('banner_${f.id}').classList.toggle('checked', this.checked)">
+        <span>${f.label}</span>
+      </label>`;
     } else {
-      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : ''} value="${data[f.id] || ''}" ${f.disabled ? 'readonly' : ''}>`;
-      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ''}</span>`;
+      const oninputHandler = f.validate === 'phone' 
+        ? `oninput="this.value = formatPhone(this.value); save('${f.id}', this.value)"` 
+        : `oninput="save('${f.id}', this.value)"`;
+      const inputOnblur = f.req && !f.validate ? 'onblur="validateRequired(this)"' : (f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : '');
+      input = `<input type="${f.type||'text'}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.req?'required':''} ${f.disabled ? '' : oninputHandler} ${inputOnblur} value="${data[f.id] || ''}" ${f.disabled ? 'readonly' : ''}>`;
+      if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ' '}</span>`;
     }
     const req = f.req ? `<span class="req">*</span>` : '';
     return `<div class="form-group ${cls}"><label for="${f.id}">${f.label}${req}</label>${input}</div>`;
@@ -720,17 +792,80 @@ function buildFields(fields) {
 // ═══════════════════════════════════════════════════════════
 function save(id, val) { data[id] = val; }
 
+function validateRequired(el) {
+  if (!el) return;
+  const value = el.value || '';
+  const isEmpty = !value.trim();
+  el.classList.toggle('error', isEmpty);
+  const msgEl = el.parentNode.querySelector('.error-msg');
+  if (msgEl) {
+    msgEl.textContent = isEmpty ? 'Campo obrigatório' : '';
+    msgEl.style.display = isEmpty ? 'block' : 'none';
+  }
+}
+
 function validateField(el, type) {
+  if (!el) return;
+  const value = el.value || '';
   if (type === 'cpf') {
-    const isValid = validateCPF(el.value);
-    el.classList.toggle('error', !isValid && el.value.trim());
+    const isValid = validateCPF(value);
+    el.classList.toggle('error', !isValid && value.trim());
     const msgEl = el.parentNode.querySelector('.error-msg');
     if (msgEl) {
-      msgEl.textContent = isValid || !el.value.trim() ? '' : 'CPF inválido';
-      msgEl.style.display = isValid || !el.value.trim() ? 'none' : 'block';
+      msgEl.textContent = isValid || !value.trim() ? '' : 'CPF inválido';
+      msgEl.style.display = isValid || !value.trim() ? 'none' : 'block';
+    }
+    // Validar também se é obrigatório
+    if (el.hasAttribute('required') && !value.trim()) {
+      el.classList.add('error');
+      if (msgEl) {
+        msgEl.textContent = 'Campo obrigatório';
+        msgEl.style.display = 'block';
+      }
     }
   } else if (type === 'cep') {
-    buscarCEP(el.value);
+    buscarCEP(el.id, value);
+    // Validar também se é obrigatório
+    if (el.hasAttribute('required') && !value.trim()) {
+      el.classList.add('error');
+      const msgEl = el.parentNode.querySelector('.error-msg');
+      if (msgEl) {
+        msgEl.textContent = 'Campo obrigatório';
+        msgEl.style.display = 'block';
+      }
+    }
+  } else if (type === 'phone') {
+    const isValid = validatePhone(value);
+    el.classList.toggle('error', !isValid && value.trim());
+    const msgEl = el.parentNode.querySelector('.error-msg');
+    if (msgEl) {
+      msgEl.textContent = isValid || !value.trim() ? '' : 'Telefone inválido (padrão: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX)';
+      msgEl.style.display = isValid || !value.trim() ? 'none' : 'block';
+    }
+    // Validar também se é obrigatório
+    if (el.hasAttribute('required') && !value.trim()) {
+      el.classList.add('error');
+      if (msgEl) {
+        msgEl.textContent = 'Campo obrigatório';
+        msgEl.style.display = 'block';
+      }
+    }
+  } else if (type === 'email') {
+    const isValid = validateEmail(value);
+    el.classList.toggle('error', !isValid && value.trim());
+    const msgEl = el.parentNode.querySelector('.error-msg');
+    if (msgEl) {
+      msgEl.textContent = isValid || !value.trim() ? '' : 'E-mail inválido';
+      msgEl.style.display = isValid || !value.trim() ? 'none' : 'block';
+    }
+    // Validar também se é obrigatório
+    if (el.hasAttribute('required') && !value.trim()) {
+      el.classList.add('error');
+      if (msgEl) {
+        msgEl.textContent = 'Campo obrigatório';
+        msgEl.style.display = 'block';
+      }
+    }
   }
 }
 
@@ -745,6 +880,44 @@ function validateCPF(cpf) {
   for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
   digit = (sum * 10) % 11 % 10;
   return digit === parseInt(cpf[10]);
+}
+
+function formatPhone(phone) {
+  // Remove caracteres não-numéricos
+  const digits = phone.replace(/\D/g, '');
+  
+  // Se não tiver dígitos, retorna vazio
+  if (digits.length === 0) return '';
+  
+  // Limita a 11 dígitos (celular)
+  const truncated = digits.slice(0, 11);
+  
+  // Formata conforme o tamanho
+  if (truncated.length <= 2) {
+    return truncated; // (XX
+  } else if (truncated.length <= 6) {
+    return `(${truncated.slice(0, 2)}) ${truncated.slice(2)}`; // (XX) XXXX
+  } else if (truncated.length <= 10) {
+    return `(${truncated.slice(0, 2)}) ${truncated.slice(2, 6)}-${truncated.slice(6)}`; // (XX) XXXX-XXXX
+  } else {
+    return `(${truncated.slice(0, 2)}) ${truncated.slice(2, 7)}-${truncated.slice(7)}`; // (XX) XXXXX-XXXX
+  }
+}
+
+function validatePhone(phone) {
+  // Remove caracteres especiais
+  const digits = phone.replace(/\D/g, '');
+  
+  // Verifica se tem 10 (fixo) ou 11 (celular) dígitos
+  if (digits.length !== 10 && digits.length !== 11) return false;
+  
+  return true;
+}
+
+function validateEmail(email) {
+  // Regex para validar e-mail
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 function updateTurmas() {
@@ -771,22 +944,195 @@ function updateTurmas() {
   }
 }
 
-async function buscarCEP(cep) {
-  cep = cep.replace(/\D/g, '');
+function updateSaidaVisibility() {
+  const saidaValue = data['SAIDA'];
+  
+  // IDs dos campos de condução (empresa de transporte)
+  const conducaoFields = ['condução_nome', 'condução_condutor', 'condução_cpf', 'condução_aux', 'condução_cpfaux'];
+  
+  // IDs dos campos de autorização (pessoas a buscar)
+  const autorizacaoFields = [
+    'autoriza1', 'autoriza1p', 'autoriza1cpf', 'autoriza1tel',
+    'autoriza2', 'autoriza2p', 'autoriza2cpf', 'autoriza2tel',
+    'autoriza3', 'autoriza3p', 'autoriza3cpf', 'autoriza3tel'
+  ];
+  
+  // Seções
+  const sectionAutorizacao = document.getElementById('section-saida-0');
+  const sectionPessoas = document.getElementById('section-saida-1');
+  const sectionSaude = document.getElementById('section-saida-2');
+  const sectionContatos = document.getElementById('section-saida-3');
+  
+  if (saidaValue === 'Sozinho(a) após as atividades') {
+    // Ocultar tudo, mostrar apenas saúde e contatos
+    conducaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    autorizacaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    if (sectionPessoas) sectionPessoas.style.display = 'none';
+    if (sectionSaude) sectionSaude.style.display = 'block';
+    if (sectionContatos) sectionContatos.style.display = 'block';
+  } else if (saidaValue === 'Somente com responsável autorizado') {
+    // Mostrar pessoas autorizadas, ocultar empresa de transporte
+    conducaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    autorizacaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'block';
+    });
+    if (sectionPessoas) sectionPessoas.style.display = 'block';
+    if (sectionSaude) sectionSaude.style.display = 'block';
+    if (sectionContatos) sectionContatos.style.display = 'block';
+  } else if (saidaValue === 'Com transporte escolar contratado') {
+    // Mostrar empresa de transporte, ocultar pessoas autorizadas
+    conducaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'block';
+    });
+    autorizacaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    if (sectionPessoas) sectionPessoas.style.display = 'none';
+    if (sectionSaude) sectionSaude.style.display = 'block';
+    if (sectionContatos) sectionContatos.style.display = 'block';
+  } else {
+    // Sem seleção - ocultar todas as seções de detalhe
+    conducaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    autorizacaoFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.parentNode.style.display = 'none';
+    });
+    if (sectionPessoas) sectionPessoas.style.display = 'none';
+    if (sectionSaude) sectionSaude.style.display = 'block';
+    if (sectionContatos) sectionContatos.style.display = 'block';
+  }
+}
+
+function toggleAcademicoSection() {
+  const isChecked = data['mesmo_responsavel'];
+  const section = document.getElementById('section-resp-1');
+  
+  if (isChecked) {
+    // Ocultar seção de responsável acadêmico
+    if (section) section.style.display = 'none';
+    
+    // Copiar dados do responsável financeiro para acadêmico
+    const financeiroCampos = [
+      'nome', 'cpf', 'rg', 'dtemissao', 'expedidor', 'dtnascimento', 'sexo',
+      'nacionalidade', 'estadocivil', 'ocupacao', 'parentesco', 'cep', 'uf',
+      'cidade', 'bairro', 'endereco', 'numero', 'email', 'residencial', 'cel'
+    ];
+    
+    financeiroCampos.forEach(campo => {
+      const financeiro = data[`respfinanceiro_${campo}`];
+      data[`respacademico_${campo}`] = financeiro;
+      
+      // Atualizar os elementos no formulário se já estão renderizados
+      const academicoEl = document.getElementById(`respacademico_${campo}`);
+      if (academicoEl) {
+        if (academicoEl.type === 'checkbox') {
+          academicoEl.checked = financeiro;
+        } else {
+          academicoEl.value = financeiro || '';
+        }
+      }
+    });
+  } else {
+    // Mostrar seção de responsável acadêmico
+    if (section) section.style.display = 'block';
+    
+    // Limpar dados do responsável acadêmico
+    const academicoCampos = [
+      'nome', 'cpf', 'rg', 'dtemissao', 'expedidor', 'dtnascimento', 'sexo',
+      'nacionalidade', 'estadocivil', 'ocupacao', 'parentesco', 'cep', 'uf',
+      'cidade', 'bairro', 'endereco', 'numero', 'email', 'residencial', 'cel'
+    ];
+    
+    academicoCampos.forEach(campo => {
+      data[`respacademico_${campo}`] = '';
+      
+      // Atualizar os elementos no formulário se já estão renderizados
+      const academicoEl = document.getElementById(`respacademico_${campo}`);
+      if (academicoEl) {
+        if (academicoEl.type === 'checkbox') {
+          academicoEl.checked = false;
+        } else if (academicoEl.tagName === 'SELECT') {
+          academicoEl.value = '';
+        } else {
+          academicoEl.value = '';
+        }
+      }
+    });
+  }
+}
+
+async function buscarCEP(cepFieldId, cepValue) {
+  const cep = cepValue.replace(/\D/g, '');
   if (cep.length !== 8) return;
+  
+  // Mapear qual grupo de endereço preencher baseado no ID do campo CEP
+  let prefix = '';
+  if (cepFieldId === 'aluno_cep') {
+    prefix = 'aluno';
+  } else if (cepFieldId === 'filiacao1_cep') {
+    prefix = 'filiacao1';
+  } else if (cepFieldId === 'filiacao2_cep') {
+    prefix = 'filiacao2';
+  } else if (cepFieldId === 'respfinanceiro_cep') {
+    prefix = 'respfinanceiro';
+  } else if (cepFieldId === 'respacademico_cep') {
+    prefix = 'respacademico';
+  } else {
+    return; // Campo de CEP desconhecido
+  }
+  
   try {
     const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
     const dataCep = await response.json();
     if (!dataCep.erro) {
-      data['aluno_endereco'] = dataCep.logradouro || '';
-      data['aluno_bairro'] = dataCep.bairro || '';
-      data['aluno_cidade'] = dataCep.localidade || '';
-      data['aluno_uf'] = dataCep.uf || '';
-      // update fields
-      document.getElementById('aluno_endereco').value = data['aluno_endereco'];
-      document.getElementById('aluno_bairro').value = data['aluno_bairro'];
-      document.getElementById('aluno_cidade').value = data['aluno_cidade'];
-      document.getElementById('aluno_uf').value = data['aluno_uf'];
+      // Determinar os nomes dos campos baseado no prefix
+      const enderecoField = prefix + '_endereco';
+      const bairroField = prefix + '_bairro';
+      const cidadeField = prefix + (prefix === 'filiacao1' || prefix === 'filiacao2' ? '_municipio' : '_cidade');
+      const ufField = prefix + '_uf';
+      
+      data[enderecoField] = dataCep.logradouro || '';
+      data[bairroField] = dataCep.bairro || '';
+      data[cidadeField] = dataCep.localidade || '';
+      data[ufField] = dataCep.uf || '';
+      
+      // Atualizar os campos no DOM e limpar erros
+      const enderecoEl = document.getElementById(enderecoField);
+      const bairroEl = document.getElementById(bairroField);
+      const cidadeEl = document.getElementById(cidadeField);
+      const ufEl = document.getElementById(ufField);
+      
+      if (enderecoEl) {
+        enderecoEl.value = data[enderecoField];
+        enderecoEl.classList.remove('error');
+      }
+      if (bairroEl) {
+        bairroEl.value = data[bairroField];
+        bairroEl.classList.remove('error');
+      }
+      if (cidadeEl) {
+        cidadeEl.value = data[cidadeField];
+        cidadeEl.classList.remove('error');
+      }
+      if (ufEl) {
+        ufEl.value = data[ufField];
+        ufEl.classList.remove('error');
+      }
     }
   } catch (error) {
     console.error('Erro ao buscar CEP:', error);
@@ -806,6 +1152,10 @@ function goTo(idx) {
         valid = false;
       }
     });
+    allFields.filter(f => f.validate && !f.disabled).forEach(f => {
+      const el = document.getElementById(f.id);
+      if (el) validateField(el, f.validate);
+    });
     // check for validation errors
     allFields.forEach(f => {
       const el = document.getElementById(f.id);
@@ -822,6 +1172,11 @@ function goTo(idx) {
   document.getElementById('panel-' + idx).classList.add('active');
   document.getElementById('tab-' + idx).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Atualizar visibilidade da seção "Saída & Saúde"
+  if (idx === 4) {
+    setTimeout(() => updateSaidaVisibility(), 10);
+  }
 
   if (STEPS[idx].isReview) buildReview();
 }
@@ -1406,7 +1761,7 @@ async function sendEnrollment() {
   }
 
   button.disabled = true;
-  showSendStatus('Gerando documento Word e enviando os dados...', 'loading');
+  showSendStatus(' enviando os dados, aguarde por favor...', 'loading');
 
   try {
     const blob = await buildTemplateDocxBlob();
@@ -1432,7 +1787,7 @@ async function sendEnrollment() {
       throw new Error(result.error || 'Não foi possível confirmar o envio.');
     }
 
-    showSendStatus(`Dados enviados. Arquivo salvo no Google Drive: ${result.fileName}`, 'success');
+    showSendStatus('Dados enviados com sucesso.', 'success');
     const toast = document.getElementById('toast');
     toast.style.display = 'flex';
     setTimeout(() => toast.style.display = 'none', 3500);
@@ -1448,6 +1803,7 @@ async function sendEnrollment() {
 // ═══════════════════════════════════════════════════════════
 buildTabs();
 buildPanels();
+setTimeout(() => updateSaidaVisibility(), 100);
 </script>
 </body>
 </html>
