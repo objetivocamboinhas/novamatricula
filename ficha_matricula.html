@@ -517,7 +517,7 @@ const STEPS = [
         { id:'filiacao1_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
         { id:'filiacao1_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
         { id:'filiacao1_comercial',    label:'Tel. comercial',       type:'text', validate:'phone', req:true },
-        { id:'filiacao1_email',        label:'E-mail',               type:'email', half:true, validate:'email' },
+        { id:'filiacao1_email',        label:'E-mail',               type:'email', half:true, validate:'email', req:true },
         { id:'filiacao1_cep',          label:'CEP',                  type:'text', req:true, validate:'cep' },
         { id:'filiacao1_uf',           label:'Estado (UF)',          type:'text', req:true },
         { id:'filiacao1_municipio',    label:'Município',            type:'text', req:true },
@@ -543,7 +543,7 @@ const STEPS = [
         { id:'filiacao2_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
         { id:'filiacao2_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
         { id:'filiacao2_comercial',    label:'Tel. comercial',       type:'text', validate:'phone', req:true },
-        { id:'filiacao2_email',        label:'E-mail',               type:'email', half:true, validate:'email' },
+        { id:'filiacao2_email',        label:'E-mail',               type:'email', half:true, validate:'email', req:true },
         { id:'filiacao2_cep',          label:'CEP',                  type:'text', req:true, validate:'cep' },
         { id:'filiacao2_uf',           label:'Estado (UF)',          type:'text', req:true },
         { id:'filiacao2_municipio',    label:'Município',            type:'text', req:true },
@@ -574,7 +574,7 @@ const STEPS = [
         { id:'respfinanceiro_bairro',       label:'Bairro',              type:'text', req:true },
         { id:'respfinanceiro_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respfinanceiro_numero',       label:'Número',              type:'text' },
-        { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true, validate:'email' },
+        { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true, validate:'email', req:true },
         { id:'respfinanceiro_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
         { id:'respfinanceiro_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
         { id:'mesmo_responsavel',           label:'O responsável financeiro também é responsável acadêmico', type:'checkbox' },
@@ -595,7 +595,7 @@ const STEPS = [
         { id:'respacademico_bairro',       label:'Bairro',              type:'text', req:true },
         { id:'respacademico_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respacademico_numero',       label:'Número',              type:'text' },
-        { id:'respacademico_email',        label:'E-mail',              type:'email', half:true, validate:'email' },
+        { id:'respacademico_email',        label:'E-mail',              type:'email', half:true, validate:'email', req:true },
         { id:'respacademico_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
         { id:'respacademico_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
       ]},
@@ -1147,19 +1147,19 @@ function goTo(idx) {
     let valid = true;
     allFields.filter(f => f.req && !f.disabled).forEach(f => {
       const el = document.getElementById(f.id);
-      if (el && !el.value.trim()) {
+      if (el && el.offsetParent !== null && !el.value.trim()) {
         el.classList.add('error');
         valid = false;
       }
     });
     allFields.filter(f => f.validate && !f.disabled).forEach(f => {
       const el = document.getElementById(f.id);
-      if (el) validateField(el, f.validate);
+      if (el && el.offsetParent !== null) validateField(el, f.validate);
     });
     // check for validation errors
     allFields.forEach(f => {
       const el = document.getElementById(f.id);
-      if (el && el.classList.contains('error')) valid = false;
+      if (el && el.offsetParent !== null && el.classList.contains('error')) valid = false;
     });
     if (!valid) return;
   }
