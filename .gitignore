@@ -1,0 +1,12 @@
+# Scripts de teste (contêm CPFs e dados fictícios)
+fill_test.js
+tmp_check.js
+
+# Arquivos temporários do Word
+~$*.docx
+
+# Configurações locais do agente
+.claude/
+
+# Node
+node_modules/

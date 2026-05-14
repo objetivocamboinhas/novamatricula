@@ -426,12 +426,83 @@
     .panel-body { padding: 18px; }
     .main { padding: 20px 14px 60px; }
   }
+
+  /* ── password gate ── */
+  #auth-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--mid) 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  #auth-gate.hidden { display: none; }
+  .auth-card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 44px 40px;
+    max-width: 400px; width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .auth-logo {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--navy), var(--mid));
+    border-radius: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 20px;
+  }
+  .auth-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy); margin-bottom: 6px; }
+  .auth-card p  { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+  .auth-input-wrap { position: relative; margin-bottom: 8px; }
+  .auth-input-wrap input {
+    width: 100%; padding: 13px 44px 13px 16px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-size: 16px; font-family: inherit; outline: none;
+    transition: border-color .2s;
+  }
+  .auth-input-wrap input:focus { border-color: var(--sky); }
+  .auth-input-wrap input.shake { animation: shake .4s ease; border-color: var(--error); }
+  .auth-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 4px;
+  }
+  .auth-error { font-size: 13px; color: var(--error); min-height: 18px; margin-bottom: 16px; text-align: left; }
+  .auth-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--navy), var(--mid));
+    color: white; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: opacity .2s;
+  }
+  .auth-btn:hover { opacity: .88; }
+  @keyframes shake {
+    0%,100%{ transform: translateX(0); }
+    20%    { transform: translateX(-8px); }
+    40%    { transform: translateX(8px); }
+    60%    { transform: translateX(-5px); }
+    80%    { transform: translateX(5px); }
+  }
 </style>
 </head>
 <body>
 
+<!-- ── Gate de acesso ── -->
+<div id="auth-gate">
+  <div class="auth-card">
+    <div class="auth-logo">🏫</div>
+    <h2>Colégio Objetivo Camboinhas</h2>
+    <p>Área restrita — Matrícula 2026.<br>Digite a senha fornecida pela secretaria.</p>
+    <div class="auth-input-wrap">
+      <input type="password" id="auth-input" placeholder="Senha de acesso"
+             onkeydown="if(event.key==='Enter') authCheck()">
+      <button class="auth-toggle" onclick="authToggle()" title="Mostrar/ocultar">👁</button>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="auth-btn" onclick="authCheck()">Acessar formulário</button>
+  </div>
+</div>
+
 <div class="hero">
-  <div class="hero-badge">✦ Formulário Digital</div>
+  <div class="hero-badge">Colégio Objetivo</div>
   <h1>Ficha de Matrícula e Ficha de Saúde.</h1>
   <p>Preencha os dados abaixo.</p>
 </div>
@@ -448,6 +519,37 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaB9Pm8iOW47JU2JfzalePWAVgZ-ApJMMrdhjE1wb9pFqWlJPM5oDWE2dX1se61m20FQ/exec'.trim();
 const TEMPLATE_VERSION = '7218127';
+const _SK = '7am7JGb_wJevjm8kxYnUMOhl8t6oc2Br';
+
+// ── Auth gate ──────────────────────────────────────────────
+const _PH = '884b0cdee2f03bb94de290243aa975d4887adba8277f772b487af9d5995c5816';
+async function _sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function authCheck() {
+  const input = document.getElementById('auth-input');
+  const err   = document.getElementById('auth-error');
+  const hash  = await _sha256(input.value.trim());
+  if (hash === _PH) {
+    sessionStorage.setItem('auth', '1');
+    document.getElementById('auth-gate').classList.add('hidden');
+    err.textContent = '';
+  } else {
+    err.textContent = 'Senha incorreta. Tente novamente.';
+    input.classList.add('shake');
+    input.value = '';
+    setTimeout(() => input.classList.remove('shake'), 450);
+    input.focus();
+  }
+}
+function authToggle() {
+  const input = document.getElementById('auth-input');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+if (sessionStorage.getItem('auth') === '1') {
+  document.getElementById('auth-gate').classList.add('hidden');
+}
 
 // ═══════════════════════════════════════════════════════════
 //  STEP DEFINITIONS
@@ -1211,7 +1313,7 @@ function buildReview() {
   }).join('');
   document.getElementById('review-content').innerHTML = `
     <div class="send-note">
-      Confira os dados abaixo. Ao enviar, o sistema gera o documento Word e salva o arquivo na pasta configurada do Google Drive.
+      Confira os dados abaixo antes de enviar.
     </div>
     <div class="review-grid">${items}</div>
     <div id="send-status" class="send-status" role="status" aria-live="polite"></div>
@@ -1796,7 +1898,8 @@ async function sendEnrollment() {
       docxBase64: await blobToBase64(blob),
       aluno: v('aluno_nomealuno'),
       ano: v('ano'),
-      data: { ...data }
+      data: { ...data },
+      _secret: _SK
     };
 
     const response = await fetch(endpoint, {
