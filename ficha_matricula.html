@@ -1918,8 +1918,7 @@ async function sendEnrollment() {
       docxBase64: await blobToBase64(blob),
       aluno: v('aluno_nomealuno'),
       ano: v('ano'),
-      data: { ...data },
-      _secret: _SK
+      data: { ...data }
     };
 
     const response = await fetch(endpoint, {
