@@ -735,7 +735,8 @@ const STEPS = [
       ]},
       { title: 'Saúde', fields: [
         { id:'aluno_planodesaude',  label:'Plano de saúde',          type:'select', options:[
-          'Hapvida / NotreDame Intermédica',
+        'Não Possui',  
+        'Hapvida / NotreDame Intermédica',
           'Bradesco Saúde',
           'Amil',
           'SulAmérica Saúde',
@@ -748,7 +749,7 @@ const STEPS = [
         { id:'aluno_planonumero',   label:'Nº da carteira',          type:'text' },
         { id:'aluno_medico',        label:'Médico responsável',      type:'text' },
         { id:'aluno_medicotel',     label:'Tel. do médico',          type:'text', validate:'phone' },
-        { id:'medicamentosn',       label:'Uso regular de remédio?', type:'select', options:['Não','Sim'] },
+        { id:'medicamentosn',       label:'Faz Uso regular de remédio?', type:'select', options:['Não','Sim'] },
         { id:'aluno_medicamento',   label:'Qual(is) remédio(s)',     type:'text' },
         { id:'alergicosn',          label:'É alérgico(a)?',          type:'select', options:['Não','Sim'] },
         { id:'ALERGICO_TEXTO',      label:'Especificação da alergia',type:'text' },
@@ -847,6 +848,12 @@ function buildFields(fields) {
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'aluno_irmao') {
           onchange = 'onchange="save(\'aluno_irmao\',this.value); updateIrmaoVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'medicamentosn') {
+          onchange = 'onchange="save(\'medicamentosn\',this.value); updateMedicamentoVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'alergicosn') {
+          onchange = 'onchange="save(\'alergicosn\',this.value); updateAlergicoVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'SAIDA') {
           onchange = 'onchange="save(\'SAIDA\',this.value); updateSaidaVisibility();"';
@@ -1035,6 +1042,16 @@ function updateIrmaoVisibility() {
   const show = temIrmao === 'Sim';
   if (qtEl) qtEl.parentNode.style.display = show ? '' : 'none';
   if (turmaEl) turmaEl.parentNode.style.display = show ? '' : 'none';
+}
+
+function updateMedicamentoVisibility() {
+  const el = document.getElementById('aluno_medicamento');
+  if (el) el.parentNode.style.display = data['medicamentosn'] === 'Sim' ? '' : 'none';
+}
+
+function updateAlergicoVisibility() {
+  const el = document.getElementById('ALERGICO_TEXTO');
+  if (el) el.parentNode.style.display = data['alergicosn'] === 'Sim' ? '' : 'none';
 }
 
 function updateTurmas() {
@@ -1293,7 +1310,9 @@ function goTo(idx) {
   if (idx === 1) {
     setTimeout(() => updateIrmaoVisibility(), 10);
   }
-  // Atualizar visibilidade da seção "Saída & Saúde"
+  if (idx === 5) {
+    setTimeout(() => { updateSaidaVisibility(); updateMedicamentoVisibility(); updateAlergicoVisibility(); }, 10);
+  }
   if (idx === 4) {
     setTimeout(() => updateSaidaVisibility(), 10);
   }
@@ -1925,6 +1944,8 @@ buildTabs();
 buildPanels();
 setTimeout(() => updateSaidaVisibility(), 100);
 setTimeout(() => updateIrmaoVisibility(), 100);
+setTimeout(() => updateMedicamentoVisibility(), 100);
+setTimeout(() => updateAlergicoVisibility(), 100);
 </script>
 </body>
 </html>
