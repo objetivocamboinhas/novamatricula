@@ -744,6 +744,9 @@ function buildFields(fields) {
         if (f.id === 'segmento') {
           onchange = 'onchange="save(\'segmento\',this.value); updateTurmas();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'aluno_irmao') {
+          onchange = 'onchange="save(\'aluno_irmao\',this.value); updateIrmaoVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'SAIDA') {
           onchange = 'onchange="save(\'SAIDA\',this.value); updateSaidaVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
@@ -922,6 +925,15 @@ function validateEmail(email) {
   // Regex para validar e-mail
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+}
+
+function updateIrmaoVisibility() {
+  const temIrmao = data['aluno_irmao'];
+  const qtEl = document.getElementById('aluno_irmaoqt');
+  const turmaEl = document.getElementById('aluno_turmairmao');
+  const show = temIrmao === 'Sim';
+  if (qtEl) qtEl.parentNode.style.display = show ? '' : 'none';
+  if (turmaEl) turmaEl.parentNode.style.display = show ? '' : 'none';
 }
 
 function updateTurmas() {
@@ -1177,6 +1189,9 @@ function goTo(idx) {
   document.getElementById('tab-' + idx).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
+  if (idx === 1) {
+    setTimeout(() => updateIrmaoVisibility(), 10);
+  }
   // Atualizar visibilidade da seção "Saída & Saúde"
   if (idx === 4) {
     setTimeout(() => updateSaidaVisibility(), 10);
@@ -1812,6 +1827,7 @@ async function sendEnrollment() {
 buildTabs();
 buildPanels();
 setTimeout(() => updateSaidaVisibility(), 100);
+setTimeout(() => updateIrmaoVisibility(), 100);
 </script>
 </body>
 </html>
