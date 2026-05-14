@@ -462,7 +462,6 @@ const STEPS = [
       { id:'segmento',    label:'Segmento',          type:'select', options:['Educação Infantil','Ensino Fundamental I','Ensino Fundamental II','Ensino Médio'], req:true },
       { id:'turma',       label:'Turma',             type:'select', options:[], req:true },
       { id:'TURNO',       label:'Turno',              type:'select', options:['Manhã','Tarde','Integral'], req:true },
-      { id:'N_Matricula', label:'Nº da matrícula (secretaria)', type:'text', placeholder:'Uso da secretaria' },
     ]
   },
   {
@@ -1282,7 +1281,7 @@ function buildDoc() {
       alignment: AlignmentType.CENTER, spacing:{after:60}
     }),
     new Paragraph({
-      children: [new TextRun({ text: `Ano Letivo: ${v('ano')}   |   Turno: ${v('TURNO')}   |   Matrícula: ${v('N_Matricula')||'_______'}`, size:20, font:'Arial' })],
+      children: [new TextRun({ text: `Ano Letivo: ${v('ano')}   |   Turno: ${v('TURNO')}`, size:20, font:'Arial' })],
       alignment: AlignmentType.CENTER, spacing:{after:200}
     }),
 

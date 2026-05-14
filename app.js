@@ -5,7 +5,6 @@ const FIELD_GROUPS = [
     title: "Dados da Matricula",
     open: true,
     fields: [
-      ["N_Matricula", "Numero da matricula"],
       ["ano", "Ano"],
       ["getdate", "Data"],
       ["segmento", "Segmento"],
