@@ -493,6 +493,7 @@ const STEPS = [
         { id:'aluno_bairro',       label:'Bairro',               type:'text', req:true },
         { id:'aluno_endereco',     label:'Endereço',             type:'text',   half:true, req:true },
         { id:'numero',             label:'Número',               type:'text', req:true },
+        { id:'aluno_complemento',  label:'Complemento',          type:'text',   placeholder:'Apto, sala, bloco...' },
         { id:'aluno_email',        label:'E-mail',               type:'email', validate:'email', req:true },
         { id:'aluno_cel',          label:'Celular',              type:'text', validate:'phone', req:true },
         { id:'aluno_residencial',  label:'Tel. residencial',     type:'text', validate:'phone', req:true },
@@ -508,7 +509,7 @@ const STEPS = [
         { id:'filiacao1_nome',         label:'Nome completo',        type:'text',   req:true, full:true },
         { id:'filiacao1_dtnascimento', label:'Data de nascimento',   type:'date' },
         { id:'filiacao1_cpf',          label:'CPF',                  type:'text', validate:'cpf', req:true },
-        { id:'filiacao1_rg',           label:'RG / ID e emissor',    type:'text' },
+        { id:'filiacao1_rg',           label:'RG / ID e emissor',    type:'text', req:true },
         { id:'filiacao1_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileira' },
         { id:'filiacao1_civil',        label:'Estado civil',         type:'select', options:['Solteira','Casada','Divorciada','Viúva','União Estável','Outro'] },
         { id:'filiacao1_ocupacao',     label:'Ocupação',             type:'text' },
@@ -523,6 +524,7 @@ const STEPS = [
         { id:'filiacao1_municipio',    label:'Município',            type:'text', req:true },
         { id:'filiacao1_bairro',       label:'Bairro',               type:'text', req:true },
         { id:'filiacao1_endereco',     label:'Endereço',             type:'text',  half:true, req:true },
+        { id:'filiacao1_complemento',  label:'Complemento',          type:'text',  placeholder:'Apto, sala, bloco...' },
       ]},
     ]
   },
@@ -534,7 +536,7 @@ const STEPS = [
         { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true, req:true },
         { id:'filiacao2_dtnascimento', label:'Data de nascimento',   type:'date' },
         { id:'filiacao2_cpf',          label:'CPF',                  type:'text', validate:'cpf', req:true },
-        { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text' },
+        { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text', req:true },
         { id:'filiacao2_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro' },
         { id:'filiacao2_civil',        label:'Estado civil',         type:'select', options:['Solteiro','Casado','Divorciado','Viúvo','União Estável','Outro'] },
         { id:'filiacao2_ocupacao',     label:'Ocupação',             type:'text' },
@@ -549,6 +551,7 @@ const STEPS = [
         { id:'filiacao2_municipio',    label:'Município',            type:'text', req:true },
         { id:'filiacao2_bairro',       label:'Bairro',               type:'text', req:true },
         { id:'filiacao2_endereco',     label:'Endereço',             type:'text',  half:true, req:true },
+        { id:'filiacao2_complemento',  label:'Complemento',          type:'text',  placeholder:'Apto, sala, bloco...' },
       ]},
     ]
   },
@@ -574,6 +577,7 @@ const STEPS = [
         { id:'respfinanceiro_bairro',       label:'Bairro',              type:'text', req:true },
         { id:'respfinanceiro_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respfinanceiro_numero',       label:'Número',              type:'text' },
+        { id:'respfinanceiro_complemento',  label:'Complemento',         type:'text',  placeholder:'Apto, sala, bloco...' },
         { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true, validate:'email', req:true },
         { id:'respfinanceiro_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
         { id:'respfinanceiro_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
@@ -595,6 +599,7 @@ const STEPS = [
         { id:'respacademico_bairro',       label:'Bairro',              type:'text', req:true },
         { id:'respacademico_endereco',     label:'Endereço',            type:'text',  half:true, req:true },
         { id:'respacademico_numero',       label:'Número',              type:'text' },
+        { id:'respacademico_complemento',  label:'Complemento',         type:'text',  placeholder:'Apto, sala, bloco...' },
         { id:'respacademico_email',        label:'E-mail',              type:'email', half:true, validate:'email', req:true },
         { id:'respacademico_residencial',  label:'Tel. residencial',    type:'text', validate:'phone', req:true },
         { id:'respacademico_cel',          label:'Tel. celular',        type:'text', validate:'phone', req:true },
@@ -651,11 +656,11 @@ const STEPS = [
         { id:'aluno_febreremedio',  label:'Dosagem',                 type:'text' },
       ]},
       { title: 'Contatos de emergência', fields: [
-        { id:'parentesco1_nome', label:'Nome — contato 1',       type:'text' },
-        { id:'parentesco1_tipo', label:'Parentesco',             type:'text' },
+        { id:'parentesco1_nome', label:'Nome — contato 1',       type:'text', req:true },
+        { id:'parentesco1_tipo', label:'Parentesco',             type:'text', req:true },
         { id:'parentesco1_tel',  label:'Telefone',               type:'text', validate:'phone', req:true },
-        { id:'parentesco2_nome', label:'Nome — contato 2',       type:'text' },
-        { id:'parentesco2_tipo', label:'Parentesco',             type:'text' },
+        { id:'parentesco2_nome', label:'Nome — contato 2',       type:'text', req:true },
+        { id:'parentesco2_tipo', label:'Parentesco',             type:'text', req:true },
         { id:'parentesco2_cel',  label:'Telefone',               type:'text', validate:'phone', req:true },
       ]},
     ]
@@ -1030,7 +1035,7 @@ function toggleAcademicoSection() {
     const financeiroCampos = [
       'nome', 'cpf', 'rg', 'dtemissao', 'expedidor', 'dtnascimento', 'sexo',
       'nacionalidade', 'estadocivil', 'ocupacao', 'parentesco', 'cep', 'uf',
-      'cidade', 'bairro', 'endereco', 'numero', 'email', 'residencial', 'cel'
+      'cidade', 'bairro', 'endereco', 'numero', 'complemento', 'email', 'residencial', 'cel'
     ];
     
     financeiroCampos.forEach(campo => {
@@ -1055,7 +1060,7 @@ function toggleAcademicoSection() {
     const academicoCampos = [
       'nome', 'cpf', 'rg', 'dtemissao', 'expedidor', 'dtnascimento', 'sexo',
       'nacionalidade', 'estadocivil', 'ocupacao', 'parentesco', 'cep', 'uf',
-      'cidade', 'bairro', 'endereco', 'numero', 'email', 'residencial', 'cel'
+      'cidade', 'bairro', 'endereco', 'numero', 'complemento', 'email', 'residencial', 'cel'
     ];
     
     academicoCampos.forEach(campo => {
@@ -1321,7 +1326,7 @@ function buildDoc() {
       normal('   ',20),
       bold('Cidade: ',20), normal(v('aluno_cidade')||'__________________',20),
     ], spacing:{after:60} }),
-    field('Endereço', `${v('aluno_endereco')||'__________________________'}  Nº ${v('numero')||'______'}  Bairro: ${v('aluno_bairro')||'______________'}`),
+    field('Endereço', `${v('aluno_endereco')||'__________________________'}  Nº ${v('numero')||'______'}${v('aluno_complemento') ? '  Compl.: '+v('aluno_complemento') : ''}  Bairro: ${v('aluno_bairro')||'______________'}`),
     new Paragraph({ children:[
       bold('E-mail: ',20), normal(v('aluno_email')||'__________________________',20),
       normal('   ',20),
@@ -1348,7 +1353,7 @@ function buildDoc() {
     ], spacing:{after:60} }),
     field('E-mail', v('filiacao1_email')),
     new Paragraph({ children:[
-      bold('End.: ',20), normal(`${v('filiacao1_endereco')||'________________________'}  Bairro: ${v('filiacao1_bairro')||'______________'}  Mun.: ${v('filiacao1_municipio')||'___________'}  UF: ${v('filiacao1_uf')||'__'}  CEP: ${v('filiacao1_cep')||'_________'}`,20),
+      bold('End.: ',20), normal(`${v('filiacao1_endereco')||'________________________'}${v('filiacao1_complemento') ? '  Compl.: '+v('filiacao1_complemento') : ''}  Bairro: ${v('filiacao1_bairro')||'______________'}  Mun.: ${v('filiacao1_municipio')||'___________'}  UF: ${v('filiacao1_uf')||'__'}  CEP: ${v('filiacao1_cep')||'_________'}`,20),
     ], spacing:{after:120} }),
 
     sectionTitle('3. Filiação 2 — Pai'),
@@ -1370,7 +1375,7 @@ function buildDoc() {
     ], spacing:{after:60} }),
     field('E-mail', v('filiacao2_email')),
     new Paragraph({ children:[
-      bold('End.: ',20), normal(`${v('filiacao2_endereco')||'________________________'}  Bairro: ${v('filiacao2_bairro')||'______________'}  Mun.: ${v('filiacao2_municipio')||'___________'}  UF: ${v('filiacao2_uf')||'__'}  CEP: ${v('filiacao2_cep')||'_________'}`,20),
+      bold('End.: ',20), normal(`${v('filiacao2_endereco')||'________________________'}${v('filiacao2_complemento') ? '  Compl.: '+v('filiacao2_complemento') : ''}  Bairro: ${v('filiacao2_bairro')||'______________'}  Mun.: ${v('filiacao2_municipio')||'___________'}  UF: ${v('filiacao2_uf')||'__'}  CEP: ${v('filiacao2_cep')||'_________'}`,20),
     ], spacing:{after:200} }),
 
     new Paragraph({ children:[ new TextRun({text:`${v('aluno_nomealuno')||'__________________________'} — ${today()}`, size:18, font:'Arial', italics:true })], alignment: AlignmentType.RIGHT, spacing:{after:60} }),
@@ -1404,7 +1409,7 @@ function buildDoc() {
       normal('   UF: ',20), normal(v('respfinanceiro_uf')||'__',20),
       normal('   Cidade: ',20), normal(v('respfinanceiro_cidade')||'________________',20),
     ], spacing:{after:60} }),
-    field('Endereço', `${v('respfinanceiro_endereco')||'__________________________'}  Nº ${v('respfinanceiro_numero')||'_____'}  Bairro: ${v('respfinanceiro_bairro')||'______________'}`),
+    field('Endereço', `${v('respfinanceiro_endereco')||'__________________________'}  Nº ${v('respfinanceiro_numero')||'_____'}${v('respfinanceiro_complemento') ? '  Compl.: '+v('respfinanceiro_complemento') : ''}  Bairro: ${v('respfinanceiro_bairro')||'______________'}`),
     new Paragraph({ children:[
       bold('E-mail: ',20), normal(v('respfinanceiro_email')||'__________________________',20),
       normal('   Cel: ',20), normal(v('respfinanceiro_cel')||'________________',20),
@@ -1423,7 +1428,7 @@ function buildDoc() {
       normal('   UF: ',20), normal(v('respacademico_uf')||'__',20),
       normal('   Cidade: ',20), normal(v('respacademico_cidade')||'________________',20),
     ], spacing:{after:60} }),
-    field('Endereço', `${v('respacademico_endereco')||'__________________________'}  Nº ${v('respacademico_numero')||'_____'}  Bairro: ${v('respacademico_bairro')||'______________'}`),
+    field('Endereço', `${v('respacademico_endereco')||'__________________________'}  Nº ${v('respacademico_numero')||'_____'}${v('respacademico_complemento') ? '  Compl.: '+v('respacademico_complemento') : ''}  Bairro: ${v('respacademico_bairro')||'______________'}`),
     new Paragraph({ children:[
       bold('E-mail: ',20), normal(v('respacademico_email')||'__________________________',20),
       normal('   Cel: ',20), normal(v('respacademico_cel')||'________________',20),

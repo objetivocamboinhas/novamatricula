@@ -47,6 +47,7 @@ const FIELD_GROUPS = [
       ["aluno_bairro", "Bairro"],
       ["aluno_endereco", "Endereco", "wide"],
       ["numero", "Numero"],
+      ["aluno_complemento", "Complemento"],
     ],
   },
   {
@@ -68,6 +69,7 @@ const FIELD_GROUPS = [
       ["filiacao1_municipio", "Municipio"],
       ["filiacao1_bairro", "Bairro"],
       ["filiacao1_endereco", "Endereco", "wide"],
+      ["filiacao1_complemento", "Complemento"],
     ],
   },
   {
@@ -89,6 +91,7 @@ const FIELD_GROUPS = [
       ["filiacao2_municipio", "Municipio"],
       ["filiacao2_bairro", "Bairro"],
       ["filiacao2_endereco", "Endereco", "wide"],
+      ["filiacao2_complemento", "Complemento"],
     ],
   },
   {
@@ -114,6 +117,7 @@ const FIELD_GROUPS = [
       ["respfinanceiro_bairro", "Bairro"],
       ["respfinanceiro_endereco", "Endereco", "wide"],
       ["respfinanceiro_numero", "Numero"],
+      ["respfinanceiro_complemento", "Complemento"],
     ],
   },
   {
@@ -137,6 +141,7 @@ const FIELD_GROUPS = [
       ["respacademico_bairro", "Bairro"],
       ["respacademico_endereco", "Endereco", "wide"],
       ["respacademico_numero", "Numero"],
+      ["respacademico_complemento", "Complemento"],
       ["informaçõesresponsavel", "Informacoes do responsavel", "full textarea"],
     ],
   },
