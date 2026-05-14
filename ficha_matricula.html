@@ -561,9 +561,9 @@ const STEPS = [
       { title: 'Responsável Financeiro', fields: [
         { id:'respfinanceiro_nome',         label:'Nome completo',       type:'text',   req:true, full:true },
         { id:'respfinanceiro_cpf',          label:'CPF',                 type:'text',   req:true, validate:'cpf' },
-        { id:'respfinanceiro_rg',           label:'RG',                  type:'text' },
+        { id:'respfinanceiro_rg',           label:'RG',                  type:'text', req:true },
         { id:'respfinanceiro_dtemissao',    label:'Data emissão RG',     type:'date' },
-        { id:'respfinanceiro_expedidor',    label:'Órgão expedidor',     type:'text' },
+        { id:'respfinanceiro_expedidor',    label:'Órgão expedidor',     type:'text', req:true },
         { id:'respfinanceiro_dtnascimento', label:'Data de nascimento',  type:'date' },
         { id:'respfinanceiro_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
         { id:'respfinanceiro_nacionalidade',label:'Nacionalidade',       type:'text' },
@@ -585,9 +585,9 @@ const STEPS = [
       { title: 'Responsável Acadêmico', fields: [
         { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true, req:true },
         { id:'respacademico_cpf',          label:'CPF',                 type:'text', validate:'cpf' },
-        { id:'respacademico_rg',           label:'RG',                  type:'text' },
+        { id:'respacademico_rg',           label:'RG',                  type:'text', req:true },
         { id:'respacademico_dtemissao',    label:'Data emissão RG',     type:'date' },
-        { id:'respacademico_expedidor',    label:'Órgão expedidor',     type:'text' },
+        { id:'respacademico_expedidor',    label:'Órgão expedidor',     type:'text', req:true },
         { id:'respacademico_dtnascimento', label:'Data de nascimento',  type:'date' },
         { id:'respacademico_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
         { id:'respacademico_ocupacao',     label:'Ocupação',            type:'text' },
