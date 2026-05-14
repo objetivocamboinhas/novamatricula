@@ -1879,39 +1879,11 @@ function crc32(bytes) {
 async function sendEnrollment() {
   const button = document.getElementById('sendBtn');
   button.disabled = true;
-  showSendStatus('Gerando documento, aguarde...', 'loading');
-
-  let blob;
-  try {
-    blob = await buildTemplateDocxBlob();
-  } catch (err) {
-    showSendStatus(`Erro ao gerar o documento: ${err.message}`, 'error');
-    button.disabled = false;
-    return;
-  }
-
-  // Baixar o arquivo localmente sempre, independente do Drive
-  const fileName = makeFileName();
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-
-  // Tentar enviar ao Google Drive
-  const endpoint = APPS_SCRIPT_URL.trim();
-  if (!endpoint) {
-    showSendStatus('Documento baixado. Envio ao Drive não configurado.', 'success');
-    button.disabled = false;
-    return;
-  }
-
-  showSendStatus('Documento baixado. Enviando ao Drive...', 'loading');
+  showSendStatus('Aguarde, enviando os dados...', 'loading');
 
   try {
+    const blob = await buildTemplateDocxBlob();
+    const fileName = makeFileName();
     const payload = {
       fileName,
       mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -1921,7 +1893,7 @@ async function sendEnrollment() {
       data: { ...data }
     };
 
-    const response = await fetch(endpoint, {
+    const response = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
@@ -1932,15 +1904,14 @@ async function sendEnrollment() {
       throw new Error(result.error || 'Resposta inválida do servidor.');
     }
 
-    showSendStatus('Documento baixado e salvo no Drive com sucesso.', 'success');
+    showSendStatus('Matrícula enviada com sucesso!', 'success');
     const toast = document.getElementById('toast');
     toast.style.display = 'flex';
     setTimeout(() => toast.style.display = 'none', 3500);
   } catch (err) {
-    const isNetwork = err instanceof TypeError;
-    const msg = isNetwork
-      ? 'Documento baixado localmente. Falha ao enviar ao Drive (erro de rede — verifique a implantação do Apps Script).'
-      : `Documento baixado localmente. Falha no Drive: ${err.message}`;
+    const msg = err instanceof TypeError
+      ? 'Falha na conexão. Verifique sua internet e tente novamente.'
+      : `Erro no envio: ${err.message}`;
     showSendStatus(msg, 'error');
   } finally {
     button.disabled = false;
