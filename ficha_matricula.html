@@ -982,7 +982,7 @@ function buildFields(fields) {
         const checked = data[optId] ? 'checked' : '';
         return `<label class="check-opt"><input type="checkbox" id="${optId}" ${checked} onchange="save('${optId}', this.checked)">${opt.label}</label>`;
       }).join('');
-      input = `<div class="checkgroup">${checkboxes}</div>`;
+      input = `<div class="checkgroup" id="${f.id}">${checkboxes}</div>`;
     } else if (f.type === 'textarea') {
       const textareaOnblur = f.req ? 'onblur="validateRequired(this)"' : (f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : '');
       input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${textareaOnblur} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
