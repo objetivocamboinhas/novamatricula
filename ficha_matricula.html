@@ -478,6 +478,30 @@
     60%    { transform: translateX(-5px); }
     80%    { transform: translateX(5px); }
   }
+
+  /* ── checkgroup (múltipla escolha) ── */
+  .checkgroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 10px 0 4px;
+  }
+  .check-opt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+  }
+  .check-opt input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--mid);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -734,27 +758,83 @@ const STEPS = [
         { id:'autoriza3tel', label:'Telefone',                  type:'text', validate:'phone', req:true },
       ]},
       { title: 'Saúde', fields: [
-        { id:'aluno_planodesaude',  label:'Plano de saúde',          type:'select', options:[
-        'Não Possui',  
-        'Hapvida / NotreDame Intermédica',
-          'Bradesco Saúde',
-          'Amil',
-          'SulAmérica Saúde',
-          'Unimed',
-          'Seguros Unimed',
-          'Porto Seguro Saúde',
-          'Prevent Senior',
-          'Assim Saúde'
+        { id:'aluno_planodesaude',  label:'Plano de saúde', type:'select', options:[
+          'Não Possui','Hapvida / NotreDame Intermédica','Bradesco Saúde','Amil',
+          'SulAmérica Saúde','Unimed','Seguros Unimed','Porto Seguro Saúde','Prevent Senior','Assim Saúde'
         ], req:true },
-        { id:'aluno_planonumero',   label:'Nº da carteira',          type:'text' },
-        { id:'aluno_medico',        label:'Médico responsável pelo aluno(a)',      type:'text' },
-        { id:'aluno_medicotel',     label:'Tel. do médico responsável?',          type:'text', validate:'phone' },
-        { id:'medicamentosn',       label:'Faz Uso regular de remédio?', type:'select', options:['Não','Sim'] },
-        { id:'aluno_medicamento',   label:'Qual(is) remédio(s)',     type:'text' },
-        { id:'alergicosn',          label:'É alérgico(a)?',          type:'select', options:['Não','Sim'] },
-        { id:'ALERGICO_TEXTO',      label:'Especificação da alergia',type:'text' },
-        { id:'aluno_febre',         label:'Remédio para febre alta', type:'text' },
-        { id:'aluno_febreremedio',  label:'Dosagem',                 type:'text' },
+        { id:'aluno_planonumero',  label:'Nº da carteira',                       type:'text' },
+        { id:'aluno_medico',       label:'Médico responsável pelo aluno(a)',      type:'text' },
+        { id:'aluno_medicotel',    label:'Tel. do médico responsável',            type:'text', validate:'phone' },
+
+        { id:'aluno_febre',        label:'1) Em caso de febre alta, ministrar',   type:'text' },
+        { id:'aluno_febreremedio', label:'Dosagem',                               type:'text' },
+
+        { id:'medicamentosn',      label:'2) Faz uso regular de algum medicamento?', type:'select', options:['Não','Sim'] },
+        { id:'aluno_medicamento',  label:'Qual(is) remédio(s)',                   type:'text', full:true },
+
+        { id:'tratamentosn',       label:'3) Faz algum tipo de tratamento médico?', type:'select', options:['Não','Sim'] },
+        { id:'tratamento_qual',    label:'Qual(is) tratamento(s)',                type:'text', full:true },
+
+        { id:'alergicosn',         label:'4) É alérgico(a)?',                    type:'select', options:['Não','Sim'] },
+        { id:'ALERGICO_TEXTO',     label:'Especificar (alimentar, respiratória, medicamento...)', type:'text', full:true },
+
+        { id:'doencascontagiosassn', label:'5) Já contraiu alguma dessas doenças contagiosas?', type:'select', options:['Não','Sim'] },
+        { id:'doencas', label:'Doenças contraídas', type:'checkgroup', full:true, options:[
+          {key:'caxumba',     label:'Caxumba'},
+          {key:'sarampo',     label:'Sarampo'},
+          {key:'catapora',    label:'Catapora'},
+          {key:'rubeola',     label:'Rubéola'},
+          {key:'coqueluche',  label:'Coqueluche'},
+          {key:'escarlatina', label:'Escarlatina'},
+          {key:'meningite',   label:'Meningite'},
+        ]},
+        { id:'doencas_outras', label:'Outras doenças contagiosas', type:'text' },
+        { id:'doencas_quando', label:'Quando',                     type:'text' },
+
+        { id:'doencacongeniasn',    label:'6) Possui doença congênita?',          type:'select', options:['Não','Sim'] },
+        { id:'doencacongenita_qual', label:'Qual doença congênita?',              type:'text', full:true },
+
+        { id:'doencacroniasn',     label:'7) Possui alguma dessas doenças crônicas?', type:'select', options:['Não','Sim'] },
+        { id:'cronica', label:'Doenças crônicas', type:'checkgroup', full:true, options:[
+          {key:'hipertensao', label:'Hipertensão'},
+          {key:'epilepsia',   label:'Epilepsia'},
+          {key:'hemofilia',   label:'Hemofilia'},
+          {key:'asma',        label:'Asma'},
+          {key:'reumatismo',  label:'Reumatismo'},
+          {key:'celiaca',     label:'Doença Celíaca'},
+          {key:'diabetes',    label:'Diabetes'},
+        ]},
+        { id:'epilepsia_tratamentosn', label:'Epilepsia — faz tratamento?',        type:'select', options:['Não','Sim'] },
+        { id:'insulinasn',             label:'Diabetes — dependente de insulina?', type:'select', options:['Não','Sim'] },
+        { id:'cronica_outras',         label:'Outras doenças crônicas',            type:'text' },
+
+        { id:'condicaoespecialsn', label:'8) O(A) aluno(a) apresenta alguma condição especial?', type:'select', options:['Não','Sim'] },
+        { id:'condicao', label:'Condições', type:'checkgroup', full:true, options:[
+          {key:'autismo',       label:'Autismo'},
+          {key:'tdah',          label:'Déficit de Atenção (TDAH)'},
+          {key:'dislexia',      label:'Dislexia'},
+          {key:'hiperatividade',label:'Hiperatividade'},
+          {key:'defauditiva',   label:'Deficiência Auditiva'},
+          {key:'defvisual',     label:'Deficiência Visual'},
+          {key:'deffisica',     label:'Deficiência Física'},
+          {key:'outras',        label:'Outras condições'},
+        ]},
+        { id:'condicao_especificar', label:'Especificar condição', type:'text', full:true },
+
+        { id:'atendimentosn', label:'9) Faz algum desses atendimentos?', type:'select', options:['Não','Sim'] },
+        { id:'atendimento', label:'Atendimentos', type:'checkgroup', full:true, options:[
+          {key:'fono',  label:'Fonoaudiológico'},
+          {key:'psico', label:'Psicológico'},
+          {key:'neuro', label:'Neurológico'},
+          {key:'outros',label:'Outros'},
+        ]},
+        { id:'atendimento_outros', label:'Outros atendimentos (especificar)', type:'text' },
+        { id:'atendimento_tempo',  label:'Há quanto tempo?',                  type:'text' },
+
+        { id:'saude_outras_info',   label:'10) Outras informações importantes pelo Responsável', type:'text', full:true },
+        { id:'hospital_preferencia',label:'11) Em caso de urgência, hospital preferencial',      type:'text', full:true },
+        { id:'atividadefisicasn',   label:'O(A) aluno(a) em relação à atividade física', type:'select', full:true,
+          options:['Não possui restrição para atividade física','Possui restrição para atividade física'] },
       ]},
       { title: 'Contatos de emergência', fields: [
         { id:'parentesco1_nome', label:'Nome — contato 1',       type:'text', req:true },
@@ -855,6 +935,24 @@ function buildFields(fields) {
         } else if (f.id === 'alergicosn') {
           onchange = 'onchange="save(\'alergicosn\',this.value); updateAlergicoVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'tratamentosn') {
+          onchange = 'onchange="save(\'tratamentosn\',this.value); updateTratamentoVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'doencascontagiosassn') {
+          onchange = 'onchange="save(\'doencascontagiosassn\',this.value); updateDoencasContagiosas();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'doencacongeniasn') {
+          onchange = 'onchange="save(\'doencacongeniasn\',this.value); updateDoencaCongenita();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'doencacroniasn') {
+          onchange = 'onchange="save(\'doencacroniasn\',this.value); updateDoencaCronica();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'condicaoespecialsn') {
+          onchange = 'onchange="save(\'condicaoespecialsn\',this.value); updateCondicaoEspecial();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'atendimentosn') {
+          onchange = 'onchange="save(\'atendimentosn\',this.value); updateAtendimento();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'SAIDA') {
           onchange = 'onchange="save(\'SAIDA\',this.value); updateSaidaVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
@@ -878,6 +976,13 @@ function buildFields(fields) {
         input = `<select id="${f.id}" ${onchange} ${selectOnblur}><option value="">— selecione —</option>${opts}</select>`;
         if (f.req || f.validate) input += `<span class="error-msg">${f.req ? 'Campo obrigatório' : ' '}</span>`;
       }
+    } else if (f.type === 'checkgroup') {
+      const checkboxes = f.options.map(opt => {
+        const optId = f.id + '_' + opt.key;
+        const checked = data[optId] ? 'checked' : '';
+        return `<label class="check-opt"><input type="checkbox" id="${optId}" ${checked} onchange="save('${optId}', this.checked)">${opt.label}</label>`;
+      }).join('');
+      input = `<div class="checkgroup">${checkboxes}</div>`;
     } else if (f.type === 'textarea') {
       const textareaOnblur = f.req ? 'onblur="validateRequired(this)"' : (f.validate ? 'onblur="validateField(this, \'' + f.validate + '\')"' : '');
       input = `<textarea id="${f.id}" placeholder="${f.placeholder||''}" ${f.disabled ? '' : 'oninput="save(\'' + f.id + '\',this.value)"'} ${textareaOnblur} ${f.disabled ? 'readonly' : ''}>${data[f.id] || ''}</textarea>`;
@@ -1052,6 +1157,59 @@ function updateMedicamentoVisibility() {
 function updateAlergicoVisibility() {
   const el = document.getElementById('ALERGICO_TEXTO');
   if (el) el.parentNode.style.display = data['alergicosn'] === 'Sim' ? '' : 'none';
+}
+
+function updateTratamentoVisibility() {
+  const el = document.getElementById('tratamento_qual');
+  if (el) el.parentNode.style.display = data['tratamentosn'] === 'Sim' ? '' : 'none';
+}
+
+function updateDoencasContagiosas() {
+  const show = data['doencascontagiosassn'] === 'Sim';
+  ['doencas', 'doencas_outras', 'doencas_quando'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group').style.display = show ? '' : 'none';
+  });
+}
+
+function updateDoencaCongenita() {
+  const el = document.getElementById('doencacongenita_qual');
+  if (el) el.parentNode.style.display = data['doencacongeniasn'] === 'Sim' ? '' : 'none';
+}
+
+function updateDoencaCronica() {
+  const show = data['doencacroniasn'] === 'Sim';
+  ['cronica', 'epilepsia_tratamentosn', 'insulinasn', 'cronica_outras'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group').style.display = show ? '' : 'none';
+  });
+}
+
+function updateCondicaoEspecial() {
+  const show = data['condicaoespecialsn'] === 'Sim';
+  ['condicao', 'condicao_especificar'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group').style.display = show ? '' : 'none';
+  });
+}
+
+function updateAtendimento() {
+  const show = data['atendimentosn'] === 'Sim';
+  ['atendimento', 'atendimento_outros', 'atendimento_tempo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group').style.display = show ? '' : 'none';
+  });
+}
+
+function updateAllHealthVisibility() {
+  updateMedicamentoVisibility();
+  updateAlergicoVisibility();
+  updateTratamentoVisibility();
+  updateDoencasContagiosas();
+  updateDoencaCongenita();
+  updateDoencaCronica();
+  updateCondicaoEspecial();
+  updateAtendimento();
 }
 
 function updateTurmas() {
@@ -1311,7 +1469,7 @@ function goTo(idx) {
     setTimeout(() => updateIrmaoVisibility(), 10);
   }
   if (idx === 5) {
-    setTimeout(() => { updateSaidaVisibility(); updateMedicamentoVisibility(); updateAlergicoVisibility(); }, 10);
+    setTimeout(() => { updateSaidaVisibility(); updateAllHealthVisibility(); }, 10);
   }
   if (idx === 4) {
     setTimeout(() => updateSaidaVisibility(), 10);
@@ -1605,45 +1763,162 @@ function buildDoc() {
     new Paragraph({ children:[normal(v('respfinanceiro_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
   ];
 
+  // helper: retorna lista de opções marcadas num checkgroup
+  function checkedLabels(baseId, options) {
+    const marked = options.filter(opt => data[baseId + '_' + opt.key]).map(opt => opt.label);
+    return marked.length ? marked.join(', ') : '';
+  }
+
   // ── Section 4: Saúde ─────────────────────────────────────────────────────
+  const doencasOpts   = [{key:'caxumba',label:'Caxumba'},{key:'sarampo',label:'Sarampo'},{key:'catapora',label:'Catapora'},{key:'rubeola',label:'Rubéola'},{key:'coqueluche',label:'Coqueluche'},{key:'escarlatina',label:'Escarlatina'},{key:'meningite',label:'Meningite'}];
+  const cronicaOpts   = [{key:'hipertensao',label:'Hipertensão'},{key:'epilepsia',label:'Epilepsia'},{key:'hemofilia',label:'Hemofilia'},{key:'asma',label:'Asma'},{key:'reumatismo',label:'Reumatismo'},{key:'celiaca',label:'Doença Celíaca'},{key:'diabetes',label:'Diabetes'}];
+  const condicaoOpts  = [{key:'autismo',label:'Autismo'},{key:'tdah',label:'TDAH'},{key:'dislexia',label:'Dislexia'},{key:'hiperatividade',label:'Hiperatividade'},{key:'defauditiva',label:'Def. Auditiva'},{key:'defvisual',label:'Def. Visual'},{key:'deffisica',label:'Def. Física'},{key:'outras',label:'Outras'}];
+  const atendOpts     = [{key:'fono',label:'Fonoaudiológico'},{key:'psico',label:'Psicológico'},{key:'neuro',label:'Neurológico'},{key:'outros',label:'Outros'}];
+
   const saudeSection = [
     new Paragraph({ children:[new PageBreak()], spacing:{after:0} }),
     ...headerBlock(),
     new Paragraph({
       children: [new TextRun({ text: 'TERMO DE DECLARAÇÃO DE SAÚDE', bold:true, size:24, color:'1a3a7c', font:'Arial' })],
-      alignment: AlignmentType.CENTER, spacing:{after:200}
+      alignment: AlignmentType.CENTER, spacing:{after:160}
     }),
-    field('Aluno(a)', v('aluno_nomealuno')),
+
+    // Cabeçalho do aluno
     new Paragraph({ children:[
-      bold('Nasc.: ',20), normal(fmtDate(v('aluno_dtnascimento'))||'__________',20),
-      normal('   Sexo: ',20), normal(v('aluno_sexo')||'______',20),
-      normal('   Tipo sang.: ',20), normal(v('aluno_tiposg')||'_____',20),
+      bold('Aluno(a): ',20), normal(v('aluno_nomealuno')||'__________________________',20),
+      normal('   Nasc.: ',20), normal(fmtDate(v('aluno_dtnascimento'))||'__________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Plano de saúde: ',20), normal(v('aluno_planodesaude')||'__________________',20),
+      bold('Pai/Mãe: ',20), normal(v('filiacao1_nome') ? `${v('filiacao1_nome')} / ${v('filiacao2_nome')||''}` : '__________________________',20),
+    ], spacing:{after:60} }),
+    new Paragraph({ children:[
+      bold('Sexo: ',20), normal(v('aluno_sexo')||'_______',20),
+      normal('   Tipo Sang./RH: ',20), normal(v('aluno_tiposg')||'_______',20),
+      normal('   Plano de saúde: ',20), normal(v('aluno_planodesaude')||'___________',20),
       normal('   Nº: ',20), normal(v('aluno_planonumero')||'_____________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Médico: ',20), normal(v('aluno_medico')||'__________________',20),
-      normal('   Tel.: ',20), normal(v('aluno_medicotel')||'_________________',20),
-    ], spacing:{after:120} }),
+      bold('Médico: ',20), normal(v('aluno_medico')||'__________________________',20),
+      normal('   Tel.: ',20), normal(v('aluno_medicotel')||'______________',20),
+    ], spacing:{after:80} }),
 
-    sectionTitle('Contatos de emergência'),
+    // Contatos de emergência
+    new Paragraph({ children:[bold('Em situação de emergência, não sendo localizados os pais ou responsáveis, procurar:',20)], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('1. ',20), normal(`${v('parentesco1_nome')||'_______________________'}  |  Parentesco: ${v('parentesco1_tipo')||'__________'}  |  Tel: ${v('parentesco1_tel')||'_________________'}`,20),
+      bold('Nome 1: ',20), normal(v('parentesco1_nome')||'___________________',20),
+      normal('   Parentesco: ',20), normal(v('parentesco1_tipo')||'___________',20),
+      normal('   Tel.: ',20), normal(v('parentesco1_tel')||'______________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('2. ',20), normal(`${v('parentesco2_nome')||'_______________________'}  |  Parentesco: ${v('parentesco2_tipo')||'__________'}  |  Tel: ${v('parentesco2_cel')||'_________________'}`,20),
-    ], spacing:{after:120} }),
+      bold('Nome 2: ',20), normal(v('parentesco2_nome')||'___________________',20),
+      normal('   Parentesco: ',20), normal(v('parentesco2_tipo')||'___________',20),
+      normal('   Tel.: ',20), normal(v('parentesco2_cel')||'______________',20),
+    ], spacing:{after:100} }),
 
-    sectionTitle('Informações de saúde'),
-    new Paragraph({ children:[ bold('Faz uso regular de medicamento? ',20), normal(v('medicamentosn')||'___',20), normal('   Qual(is): ',20), normal(v('aluno_medicamento')||'__________________________',20) ], spacing:{after:60} }),
-    new Paragraph({ children:[ bold('É alérgico(a)? ',20), normal(v('alergicosn')||'___',20), normal('   Especificação: ',20), normal(v('ALERGICO_TEXTO')||'__________________________',20) ], spacing:{after:60} }),
-    new Paragraph({ children:[ bold('Em caso de febre alta, ministrar: ',20), normal(v('aluno_febre')||'__________________',20), normal('   Dosagem: ',20), normal(v('aluno_febreremedio')||'__________',20) ], spacing:{after:200} }),
+    new Paragraph({ children:[small('DECLARO, sob as penas do art. 299 do Código Penal Brasileiro, que são inteiramente verdadeiras as informações de saúde do(a) aluno(a) fornecidas a seguir:')], spacing:{after:120} }),
+
+    // 1) Febre
+    new Paragraph({ children:[
+      bold('1) Em caso de febre alta, ministrar: ',20), normal(v('aluno_febre')||'________________',20),
+      normal('   Dosagem: ',20), normal(v('aluno_febreremedio')||'___________',20),
+    ], spacing:{after:80} }),
+
+    // 2) Medicamentos
+    new Paragraph({ children:[
+      bold('2) Faz uso regular de algum medicamento? ',20), normal(`( ${v('medicamentosn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('medicamentosn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('medicamentosn')==='Sim'?40:60} }),
+    ...(v('medicamentosn')==='Sim' ? [new Paragraph({ children:[bold('   Qual(is)? ',20), normal(v('aluno_medicamento')||'__________________________',20)], spacing:{after:60} })] : []),
+    new Paragraph({ children:[small('OBS: O responsável legal está ciente de que o(a) aluno(a) não deverá trazer remédios para a escola, salvo com receita médica e orientação por escrito.')], spacing:{after:80} }),
+
+    // 3) Tratamento médico
+    new Paragraph({ children:[
+      bold('3) Faz algum tipo de tratamento médico? ',20), normal(`( ${v('tratamentosn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('tratamentosn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('tratamentosn')==='Sim'?40:60} }),
+    ...(v('tratamentosn')==='Sim' ? [new Paragraph({ children:[bold('   Qual(is)? ',20), normal(v('tratamento_qual')||'__________________________',20)], spacing:{after:60} })] : []),
+
+    // 4) Alergia
+    new Paragraph({ children:[
+      bold('4) É alérgico(a)? ',20), normal(`( ${v('alergicosn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('alergicosn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('alergicosn')==='Sim'?40:60} }),
+    ...(v('alergicosn')==='Sim' ? [new Paragraph({ children:[bold('   Especificar: ',20), normal(v('ALERGICO_TEXTO')||'__________________________',20)], spacing:{after:60} })] : []),
+
+    // 5) Doenças contagiosas
+    new Paragraph({ children:[
+      bold('5) Já contraiu alguma dessas doenças contagiosas? ',20), normal(`( ${v('doencascontagiosassn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('doencascontagiosassn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('doencascontagiosassn')==='Sim'?40:60} }),
+    ...(v('doencascontagiosassn')==='Sim' ? [
+      new Paragraph({ children:[normal(`   ${doencasOpts.map(o => `( ${data['doencas_'+o.key]?'X':' '} ) ${o.label}`).join('   ')}`,18)], spacing:{after:40} }),
+      new Paragraph({ children:[bold('   Outras: ',20), normal(v('doencas_outras')||'_______________',20), bold('   Quando: ',20), normal(v('doencas_quando')||'_______________',20)], spacing:{after:60} }),
+    ] : []),
+
+    // 6) Doença congênita
+    new Paragraph({ children:[
+      bold('6) Possui doença congênita? ',20), normal(`( ${v('doencacongeniasn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('doencacongeniasn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('doencacongeniasn')==='Sim'?40:60} }),
+    ...(v('doencacongeniasn')==='Sim' ? [new Paragraph({ children:[bold('   Qual? ',20), normal(v('doencacongenita_qual')||'__________________________',20)], spacing:{after:60} })] : []),
+
+    // 7) Doenças crônicas
+    new Paragraph({ children:[
+      bold('7) Possui alguma dessas doenças crônicas? ',20), normal(`( ${v('doencacroniasn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('doencacroniasn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('doencacroniasn')==='Sim'?40:60} }),
+    ...(v('doencacroniasn')==='Sim' ? [
+      new Paragraph({ children:[normal(`   ${cronicaOpts.map(o => `( ${data['cronica_'+o.key]?'X':' '} ) ${o.label}`).join('   ')}`,18)], spacing:{after:40} }),
+      new Paragraph({ children:[
+        bold('   Epilepsia — Faz tratamento? ',20), normal(`( ${v('epilepsia_tratamentosn')==='Sim'?'X':' '} ) Sim  ( ${v('epilepsia_tratamentosn')==='Não'?'X':' '} ) Não`,20),
+        bold('     Diabetes — Usa insulina? ',20), normal(`( ${v('insulinasn')==='Sim'?'X':' '} ) Sim  ( ${v('insulinasn')==='Não'?'X':' '} ) Não`,20),
+      ], spacing:{after:40} }),
+      new Paragraph({ children:[bold('   Outras: ',20), normal(v('cronica_outras')||'__________________________',20)], spacing:{after:60} }),
+    ] : []),
+
+    // 8) Condições especiais
+    new Paragraph({ children:[
+      bold('8) O(A) aluno(a) apresenta alguma condição especial? ',20), normal(`( ${v('condicaoespecialsn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('condicaoespecialsn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('condicaoespecialsn')==='Sim'?40:60} }),
+    ...(v('condicaoespecialsn')==='Sim' ? [
+      new Paragraph({ children:[normal(`   ${condicaoOpts.map(o => `( ${data['condicao_'+o.key]?'X':' '} ) ${o.label}`).join('   ')}`,18)], spacing:{after:40} }),
+      new Paragraph({ children:[bold('   Especificar: ',20), normal(v('condicao_especificar')||'__________________________',20)], spacing:{after:60} }),
+      new Paragraph({ children:[small('OBS: É indispensável a apresentação do laudo médico.')], spacing:{after:60} }),
+    ] : []),
+
+    // 9) Atendimentos
+    new Paragraph({ children:[
+      bold('9) Faz algum desses atendimentos? ',20), normal(`( ${v('atendimentosn')==='Sim'?'X':' '} ) Sim`,20),
+      normal(`  ( ${v('atendimentosn')==='Não'?'X':' '} ) Não`,20),
+    ], spacing:{after:v('atendimentosn')==='Sim'?40:60} }),
+    ...(v('atendimentosn')==='Sim' ? [
+      new Paragraph({ children:[normal(`   ${atendOpts.map(o => `( ${data['atendimento_'+o.key]?'X':' '} ) ${o.label}`).join('   ')}`,18)], spacing:{after:40} }),
+      new Paragraph({ children:[bold('   Outros: ',20), normal(v('atendimento_outros')||'_____________',20), bold('   Há quanto tempo? ',20), normal(v('atendimento_tempo')||'__________',20)], spacing:{after:60} }),
+    ] : []),
+
+    // 10) Outras informações
+    new Paragraph({ children:[
+      bold('10) Outras informações pelo Responsável: ',20), normal(v('saude_outras_info')||'__________________________',20),
+    ], spacing:{after:60} }),
+
+    // 11) Hospital preferencial
+    new Paragraph({ children:[
+      bold('11) Em caso de urgência, hospital preferencial: ',20), normal(v('hospital_preferencia')||'__________________________',20),
+    ], spacing:{after:60} }),
+    new Paragraph({ children:[small('OBS: Não havendo indicação, o(a) aluno(a) será encaminhado(a) à unidade de saúde mais próxima.')], spacing:{after:100} }),
+
+    // Atividade física
+    new Paragraph({ children:[
+      bold('O(A) aluno(a): ',20),
+      normal(`( ${v('atividadefisicasn')==='Não possui restrição para atividade física'?'X':' '} ) Não possui`,20),
+      normal(`  ( ${v('atividadefisicasn')==='Possui restrição para atividade física'?'X':' '} ) Possui`,20),
+      normal(' deficiência ou doença que o(a) impeça de participar de atividade física, esportiva ou recreativa.',20),
+    ], spacing:{after:160} }),
 
     spacer(),
     new Paragraph({ children:[normal(today(), 18)], alignment:AlignmentType.RIGHT, spacing:{after:60} }),
-    new Paragraph({ children:[normal(v('respacademico_nome')||v('respfinanceiro_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
+    new Paragraph({ children:[normal(v('respfinanceiro_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
   ];
 
   // ── Build full document ───────────────────────────────────────────────────
