@@ -941,6 +941,9 @@ function buildFields(fields) {
         } else if (f.id === 'aluno_irmao') {
           onchange = 'onchange="save(\'aluno_irmao\',this.value); updateIrmaoVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
+        } else if (f.id === 'aluno_planodesaude') {
+          onchange = 'onchange="save(\'aluno_planodesaude\',this.value); updatePlanoVisibility();"';
+          opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
         } else if (f.id === 'medicamentosn') {
           onchange = 'onchange="save(\'medicamentosn\',this.value); updateMedicamentoVisibility();"';
           opts = f.options.map(o => `<option value="${o}" ${data[f.id] === o ? 'selected' : ''}>${o}</option>`).join('');
@@ -1159,6 +1162,11 @@ function updateIrmaoVisibility() {
   const show = temIrmao === 'Sim';
   if (qtEl) qtEl.parentNode.style.display = show ? '' : 'none';
   if (turmaEl) turmaEl.parentNode.style.display = show ? '' : 'none';
+}
+
+function updatePlanoVisibility() {
+  const el = document.getElementById('aluno_planonumero');
+  if (el) el.parentNode.style.display = (data['aluno_planodesaude'] && data['aluno_planodesaude'] !== 'Não Possui') ? '' : 'none';
 }
 
 function updateMedicamentoVisibility() {
