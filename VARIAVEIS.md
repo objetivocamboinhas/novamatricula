@@ -1,4 +1,4 @@
-# Documentação de Variáveis — Ficha de Matrícula
+﻿# Documentação de Variáveis — Ficha de Matrícula
 
 Todas as variáveis abaixo são preenchidas pelo formulário e inseridas no documento DOCX gerado.
 No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
@@ -59,23 +59,23 @@ No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
 
 | Variável | Descrição |
 |---|---|
-| `filiacao1_nome` | Nome da mãe |
-| `filiacao1_email` | E-mail |
-| `filiacao1_dtnascimento` | Data de nascimento |
-| `filiacao1_nacionalidade` | Nacionalidade |
-| `filiacao1_cpf` | CPF |
-| `filiacao1_rg` | RG |
-| `filiacao1_civil` | Estado civil |
-| `filiacao1_ocupacao` | Ocupação |
-| `filiacao1_cel` | Celular |
-| `filiacao1_residencial` | Telefone residencial |
-| `filiacao1_comercial` | Telefone comercial |
-| `filiacao1_cep` | CEP |
-| `filiacao1_uf` | UF |
-| `filiacao1_municipio` | Município |
-| `filiacao1_bairro` | Bairro |
-| `filiacao1_endereco` | Endereço |
-| `filiacao1_complemento` | Complemento |
+| `f1_nome` | Nome da mãe |
+| `f1_email` | E-mail |
+| `f1_dtnascimento` | Data de nascimento |
+| `f1_nacionalidade` | Nacionalidade |
+| `f1_cpf` | CPF |
+| `f1_rg` | RG |
+| `f1_civil` | Estado civil |
+| `f1_ocupacao` | Ocupação |
+| `f1_cel` | Celular |
+| `f1_residencial` | Telefone residencial |
+| `f1_comercial` | Telefone comercial |
+| `f1_cep` | CEP |
+| `f1_uf` | UF |
+| `f1_municipio` | Município |
+| `f1_bairro` | Bairro |
+| `f1_endereco` | Endereço |
+| `f1_complemento` | Complemento |
 
 ---
 
@@ -83,23 +83,23 @@ No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
 
 | Variável | Descrição |
 |---|---|
-| `filiacao2_nome` | Nome do pai |
-| `filiacao2_email` | E-mail |
-| `filiacao2_dtnascimento` | Data de nascimento |
-| `filiacao2_nacionalidade` | Nacionalidade |
-| `filiacao2_cpf` | CPF |
-| `filiacao2_rg` | RG |
-| `filiacao2_civil` | Estado civil |
-| `filiacao2_ocupacao` | Ocupação |
-| `filiacao2_cel` | Celular |
-| `filiacao2_residencial` | Telefone residencial |
-| `filiacao2_comercial` | Telefone comercial |
-| `filiacao2_cep` | CEP |
-| `filiacao2_uf` | UF |
-| `filiacao2_municipio` | Município |
-| `filiacao2_bairro` | Bairro |
-| `filiacao2_endereco` | Endereço |
-| `filiacao2_complemento` | Complemento |
+| `f2_nome` | Nome do pai |
+| `f2_email` | E-mail |
+| `f2_dtnascimento` | Data de nascimento |
+| `f2_nacionalidade` | Nacionalidade |
+| `f2_cpf` | CPF |
+| `f2_rg` | RG |
+| `f2_civil` | Estado civil |
+| `f2_ocupacao` | Ocupação |
+| `f2_cel` | Celular |
+| `f2_residencial` | Telefone residencial |
+| `f2_comercial` | Telefone comercial |
+| `f2_cep` | CEP |
+| `f2_uf` | UF |
+| `f2_municipio` | Município |
+| `f2_bairro` | Bairro |
+| `f2_endereco` | Endereço |
+| `f2_complemento` | Complemento |
 
 ---
 
@@ -107,27 +107,27 @@ No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
 
 | Variável | Descrição |
 |---|---|
-| `respfinanceiro_nome` | Nome |
-| `respfinanceiro_cpf` | CPF |
-| `respfinanceiro_sexo` | Sexo |
-| `respfinanceiro_dtnascimento` | Data de nascimento |
-| `respfinanceiro_rg` | RG |
-| `respfinanceiro_dtemissao` | Data de emissão do RG |
-| `respfinanceiro_expedidor` | Expedidor |
-| `respfinanceiro_nacionalidade` | Nacionalidade |
-| `respfinanceiro_estadocivil` | Estado civil |
-| `respfinanceiro_ocupacao` | Ocupação |
-| `respfinanceiro_parentesco` | Grau de parentesco |
-| `respfinanceiro_email` | E-mail |
-| `respfinanceiro_residencial` | Telefone residencial |
-| `respfinanceiro_cel` | Celular |
-| `respfinanceiro_cep` | CEP |
-| `respfinanceiro_uf` | Estado |
-| `respfinanceiro_cidade` | Cidade |
-| `respfinanceiro_bairro` | Bairro |
-| `respfinanceiro_endereco` | Endereço |
-| `respfinanceiro_numero` | Número |
-| `respfinanceiro_complemento` | Complemento |
+| `respf_nome` | Nome |
+| `respf_cpf` | CPF |
+| `respf_sexo` | Sexo |
+| `respf_dtnascimento` | Data de nascimento |
+| `respf_rg` | RG |
+| `respf_dtemissao` | Data de emissão do RG |
+| `respf_expedidor` | Expedidor |
+| `respf_nacionalidade` | Nacionalidade |
+| `respf_estadocivil` | Estado civil |
+| `respf_ocupacao` | Ocupação |
+| `respf_parentesco` | Grau de parentesco |
+| `respf_email` | E-mail |
+| `respf_residencial` | Telefone residencial |
+| `respf_cel` | Celular |
+| `respf_cep` | CEP |
+| `respf_uf` | Estado |
+| `respf_cidade` | Cidade |
+| `respf_bairro` | Bairro |
+| `respf_endereco` | Endereço |
+| `respf_numero` | Número |
+| `respf_complemento` | Complemento |
 
 ---
 
@@ -135,29 +135,37 @@ No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
 
 | Variável | Descrição |
 |---|---|
-| `respacademico_nome` | Nome |
-| `respacademico_cpf` | CPF |
-| `respacademico_sexo` | Sexo |
-| `respacademico_dtnascimento` | Data de nascimento |
-| `respacademico_rg` | RG |
-| `respacademico_dtemissao` | Data de emissão do RG |
-| `respacademico_expedidor` | Expedidor |
-| `respacademico_ocupacao` | Ocupação |
-| `respacademico_parentesco` | Grau de parentesco |
-| `respacademico_email` | E-mail |
-| `respacademico_residencial` | Telefone residencial |
-| `respacademico_cel` | Celular |
-| `respacademico_cep` | CEP |
-| `respacademico_uf` | Estado |
-| `respacademico_cidade` | Cidade |
-| `respacademico_bairro` | Bairro |
-| `respacademico_endereco` | Endereço |
-| `respacademico_numero` | Número |
-| `respacademico_complemento` | Complemento |
+| `respa_nome` | Nome |
+| `respa_cpf` | CPF |
+| `respa_sexo` | Sexo |
+| `respa_dtnascimento` | Data de nascimento |
+| `respa_rg` | RG |
+| `respa_dtemissao` | Data de emissão do RG |
+| `respa_expedidor` | Expedidor |
+| `respa_ocupacao` | Ocupação |
+| `respa_parentesco` | Grau de parentesco |
+| `respa_email` | E-mail |
+| `respa_residencial` | Telefone residencial |
+| `respa_cel` | Celular |
+| `respa_cep` | CEP |
+| `respa_uf` | Estado |
+| `respa_cidade` | Cidade |
+| `respa_bairro` | Bairro |
+| `respa_endereco` | Endereço |
+| `respa_numero` | Número |
+| `respa_complemento` | Complemento |
 
 ---
 
-## 7. Autorização de Saída
+## 7. Autorização de Uso de Imagem
+
+| Variável | Descrição |
+|---|---|
+| `autorizacao_imagem` | Autorização de uso de imagem (`Autorizo` / `Não Autorizo`) |
+
+---
+
+## 8. Autorização de Saída
 
 | Variável | Descrição |
 |---|---|
@@ -247,7 +255,7 @@ No template Word, use a sintaxe `{{nome_da_variavel}}` para cada campo.
 |---|---|
 | `doencascontagiosassn` | Já contraiu alguma dessas doenças? (Sim / Não) |
 | `doencas_caxumba` | Caxumba (true/false) |
-| `doencas_sarampo` | Sarampo (true/false) |
+| `doencas_caxumba` | Sarampo (true/false) |
 | `doencas_catapora` | Catapora (true/false) |
 | `doencas_rubeola` | Rubéola (true/false) |
 | `doencas_coqueluche` | Coqueluche (true/false) |

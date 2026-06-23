@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -178,6 +178,19 @@
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.full { grid-column: 1 / -1; }
   .form-group.half { grid-column: span 2; }
+
+  .info-text {
+    grid-column: 1 / -1;
+    background: #f8f9fc;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
 
   label {
     font-size: 12px;
@@ -449,24 +462,24 @@ const STEPS = [
     desc: 'Dados da mãe / filiação 1',
     sections: [
       { title: 'Dados pessoais', fields: [
-        { id:'filiacao1_nome',         label:'Nome completo',        type:'text',   req:true, full:true },
-        { id:'filiacao1_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao1_cpf',          label:'CPF',                  type:'text' },
-        { id:'filiacao1_rg',           label:'RG / ID e emissor',    type:'text' },
-        { id:'filiacao1_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileira' },
-        { id:'filiacao1_civil',        label:'Estado civil',         type:'select', options:['Solteira','Casada','Divorciada','Viúva','União Estável','Outro'] },
-        { id:'filiacao1_ocupacao',     label:'Ocupação',             type:'text' },
+        { id:'f1_nome',         label:'Nome completo',        type:'text',   req:true, full:true },
+        { id:'f1_dtnascimento', label:'Data de nascimento',   type:'date' },
+        { id:'f1_cpf',          label:'CPF',                  type:'text' },
+        { id:'f1_rg',           label:'RG / ID e emissor',    type:'text' },
+        { id:'f1_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileira' },
+        { id:'f1_civil',        label:'Estado civil',         type:'select', options:['Solteira','Casada','Divorciada','Viúva','União Estável','Outro'] },
+        { id:'f1_ocupacao',     label:'Ocupação',             type:'text' },
       ]},
       { title: 'Contato e endereço', fields: [
-        { id:'filiacao1_cel',          label:'Celular',              type:'text' },
-        { id:'filiacao1_residencial',  label:'Tel. residencial',     type:'text' },
-        { id:'filiacao1_comercial',    label:'Tel. comercial',       type:'text' },
-        { id:'filiacao1_email',        label:'E-mail',               type:'email', half:true },
-        { id:'filiacao1_cep',          label:'CEP',                  type:'text' },
-        { id:'filiacao1_uf',           label:'Estado (UF)',          type:'text' },
-        { id:'filiacao1_municipio',    label:'Município',            type:'text' },
-        { id:'filiacao1_bairro',       label:'Bairro',               type:'text' },
-        { id:'filiacao1_endereco',     label:'Endereço',             type:'text',  half:true },
+        { id:'f1_cel',          label:'Celular',              type:'text' },
+        { id:'f1_residencial',  label:'Tel. residencial',     type:'text' },
+        { id:'f1_comercial',    label:'Tel. comercial',       type:'text' },
+        { id:'f1_email',        label:'E-mail',               type:'email', half:true },
+        { id:'f1_cep',          label:'CEP',                  type:'text' },
+        { id:'f1_uf',           label:'Estado (UF)',          type:'text' },
+        { id:'f1_municipio',    label:'Município',            type:'text' },
+        { id:'f1_bairro',       label:'Bairro',               type:'text' },
+        { id:'f1_endereco',     label:'Endereço',             type:'text',  half:true },
       ]},
     ]
   },
@@ -475,24 +488,24 @@ const STEPS = [
     desc: 'Dados do pai / filiação 2',
     sections: [
       { title: 'Dados pessoais', fields: [
-        { id:'filiacao2_nome',         label:'Nome completo',        type:'text',   full:true },
-        { id:'filiacao2_dtnascimento', label:'Data de nascimento',   type:'date' },
-        { id:'filiacao2_cpf',          label:'CPF',                  type:'text' },
-        { id:'filiacao2_rg',           label:'RG / ID e emissor',    type:'text' },
-        { id:'filiacao2_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro' },
-        { id:'filiacao2_civil',        label:'Estado civil',         type:'select', options:['Solteiro','Casado','Divorciado','Viúvo','União Estável','Outro'] },
-        { id:'filiacao2_ocupacao',     label:'Ocupação',             type:'text' },
+        { id:'f2_nome',         label:'Nome completo',        type:'text',   full:true },
+        { id:'f2_dtnascimento', label:'Data de nascimento',   type:'date' },
+        { id:'f2_cpf',          label:'CPF',                  type:'text' },
+        { id:'f2_rg',           label:'RG / ID e emissor',    type:'text' },
+        { id:'f2_nacionalidade',label:'Nacionalidade',        type:'text',   placeholder:'Brasileiro' },
+        { id:'f2_civil',        label:'Estado civil',         type:'select', options:['Solteiro','Casado','Divorciado','Viúvo','União Estável','Outro'] },
+        { id:'f2_ocupacao',     label:'Ocupação',             type:'text' },
       ]},
       { title: 'Contato e endereço', fields: [
-        { id:'filiacao2_cel',          label:'Celular',              type:'text' },
-        { id:'filiacao2_residencial',  label:'Tel. residencial',     type:'text' },
-        { id:'filiacao2_comercial',    label:'Tel. comercial',       type:'text' },
-        { id:'filiacao2_email',        label:'E-mail',               type:'email', half:true },
-        { id:'filiacao2_cep',          label:'CEP',                  type:'text' },
-        { id:'filiacao2_uf',           label:'Estado (UF)',          type:'text' },
-        { id:'filiacao2_municipio',    label:'Município',            type:'text' },
-        { id:'filiacao2_bairro',       label:'Bairro',               type:'text' },
-        { id:'filiacao2_endereco',     label:'Endereço',             type:'text',  half:true },
+        { id:'f2_cel',          label:'Celular',              type:'text' },
+        { id:'f2_residencial',  label:'Tel. residencial',     type:'text' },
+        { id:'f2_comercial',    label:'Tel. comercial',       type:'text' },
+        { id:'f2_email',        label:'E-mail',               type:'email', half:true },
+        { id:'f2_cep',          label:'CEP',                  type:'text' },
+        { id:'f2_uf',           label:'Estado (UF)',          type:'text' },
+        { id:'f2_municipio',    label:'Município',            type:'text' },
+        { id:'f2_bairro',       label:'Bairro',               type:'text' },
+        { id:'f2_endereco',     label:'Endereço',             type:'text',  half:true },
       ]},
     ]
   },
@@ -501,46 +514,46 @@ const STEPS = [
     desc: 'Responsável financeiro e acadêmico',
     sections: [
       { title: 'Responsável Financeiro', fields: [
-        { id:'respfinanceiro_nome',         label:'Nome completo',       type:'text',   req:true, full:true },
-        { id:'respfinanceiro_cpf',          label:'CPF',                 type:'text',   req:true },
-        { id:'respfinanceiro_rg',           label:'RG',                  type:'text' },
-        { id:'respfinanceiro_dtemissao',    label:'Data emissão RG',     type:'date' },
-        { id:'respfinanceiro_expedidor',    label:'Órgão expedidor',     type:'text' },
-        { id:'respfinanceiro_dtnascimento', label:'Data de nascimento',  type:'date' },
-        { id:'respfinanceiro_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
-        { id:'respfinanceiro_nacionalidade',label:'Nacionalidade',       type:'text' },
-        { id:'respfinanceiro_estadocivil',  label:'Estado civil',        type:'select', options:['Solteiro(a)','Casado(a)','Divorciado(a)','Viúvo(a)','União Estável','Outro'] },
-        { id:'respfinanceiro_ocupacao',     label:'Ocupação',            type:'text' },
-        { id:'respfinanceiro_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
-        { id:'respfinanceiro_cep',          label:'CEP',                 type:'text' },
-        { id:'respfinanceiro_uf',           label:'Estado (UF)',         type:'text' },
-        { id:'respfinanceiro_cidade',       label:'Cidade',              type:'text' },
-        { id:'respfinanceiro_bairro',       label:'Bairro',              type:'text' },
-        { id:'respfinanceiro_endereco',     label:'Endereço',            type:'text',  half:true },
-        { id:'respfinanceiro_numero',       label:'Número',              type:'text' },
-        { id:'respfinanceiro_email',        label:'E-mail',              type:'email', half:true },
-        { id:'respfinanceiro_residencial',  label:'Tel. residencial',    type:'text' },
-        { id:'respfinanceiro_cel',          label:'Tel. celular',        type:'text' },
+        { id:'respf_nome',         label:'Nome completo',       type:'text',   req:true, full:true },
+        { id:'respf_cpf',          label:'CPF',                 type:'text',   req:true },
+        { id:'respf_rg',           label:'RG',                  type:'text' },
+        { id:'respf_dtemissao',    label:'Data emissão RG',     type:'date' },
+        { id:'respf_expedidor',    label:'Órgão expedidor',     type:'text' },
+        { id:'respf_dtnascimento', label:'Data de nascimento',  type:'date' },
+        { id:'respf_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
+        { id:'respf_nacionalidade',label:'Nacionalidade',       type:'text' },
+        { id:'respf_estadocivil',  label:'Estado civil',        type:'select', options:['Solteiro(a)','Casado(a)','Divorciado(a)','Viúvo(a)','União Estável','Outro'] },
+        { id:'respf_ocupacao',     label:'Ocupação',            type:'text' },
+        { id:'respf_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
+        { id:'respf_cep',          label:'CEP',                 type:'text' },
+        { id:'respf_uf',           label:'Estado (UF)',         type:'text' },
+        { id:'respf_cidade',       label:'Cidade',              type:'text' },
+        { id:'respf_bairro',       label:'Bairro',              type:'text' },
+        { id:'respf_endereco',     label:'Endereço',            type:'text',  half:true },
+        { id:'respf_numero',       label:'Número',              type:'text' },
+        { id:'respf_email',        label:'E-mail',              type:'email', half:true },
+        { id:'respf_residencial',  label:'Tel. residencial',    type:'text' },
+        { id:'respf_cel',          label:'Tel. celular',        type:'text' },
       ]},
       { title: 'Responsável Acadêmico', fields: [
-        { id:'respacademico_nome',         label:'Nome completo',       type:'text',   full:true },
-        { id:'respacademico_cpf',          label:'CPF',                 type:'text' },
-        { id:'respacademico_rg',           label:'RG',                  type:'text' },
-        { id:'respacademico_dtemissao',    label:'Data emissão RG',     type:'date' },
-        { id:'respacademico_expedidor',    label:'Órgão expedidor',     type:'text' },
-        { id:'respacademico_dtnascimento', label:'Data de nascimento',  type:'date' },
-        { id:'respacademico_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
-        { id:'respacademico_ocupacao',     label:'Ocupação',            type:'text' },
-        { id:'respacademico_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
-        { id:'respacademico_cep',          label:'CEP',                 type:'text' },
-        { id:'respacademico_uf',           label:'Estado (UF)',         type:'text' },
-        { id:'respacademico_cidade',       label:'Cidade',              type:'text' },
-        { id:'respacademico_bairro',       label:'Bairro',              type:'text' },
-        { id:'respacademico_endereco',     label:'Endereço',            type:'text',  half:true },
-        { id:'respacademico_numero',       label:'Número',              type:'text' },
-        { id:'respacademico_email',        label:'E-mail',              type:'email', half:true },
-        { id:'respacademico_residencial',  label:'Tel. residencial',    type:'text' },
-        { id:'respacademico_cel',          label:'Tel. celular',        type:'text' },
+        { id:'respa_nome',         label:'Nome completo',       type:'text',   full:true },
+        { id:'respa_cpf',          label:'CPF',                 type:'text' },
+        { id:'respa_rg',           label:'RG',                  type:'text' },
+        { id:'respa_dtemissao',    label:'Data emissão RG',     type:'date' },
+        { id:'respa_expedidor',    label:'Órgão expedidor',     type:'text' },
+        { id:'respa_dtnascimento', label:'Data de nascimento',  type:'date' },
+        { id:'respa_sexo',         label:'Sexo',                type:'select', options:['Masculino','Feminino','Outro'] },
+        { id:'respa_ocupacao',     label:'Ocupação',            type:'text' },
+        { id:'respa_parentesco',   label:'Grau de parentesco',  type:'select', options:['Mãe','Pai','Avó','Avô','Tio(a)','Irmão/Irmã','Outro'] },
+        { id:'respa_cep',          label:'CEP',                 type:'text' },
+        { id:'respa_uf',           label:'Estado (UF)',         type:'text' },
+        { id:'respa_cidade',       label:'Cidade',              type:'text' },
+        { id:'respa_bairro',       label:'Bairro',              type:'text' },
+        { id:'respa_endereco',     label:'Endereço',            type:'text',  half:true },
+        { id:'respa_numero',       label:'Número',              type:'text' },
+        { id:'respa_email',        label:'E-mail',              type:'email', half:true },
+        { id:'respa_residencial',  label:'Tel. residencial',    type:'text' },
+        { id:'respa_cel',          label:'Tel. celular',        type:'text' },
       ]},
     ]
   },
@@ -570,6 +583,13 @@ const STEPS = [
         { id:'autoriza3p',   label:'Parentesco',                type:'text' },
         { id:'autoriza3cpf', label:'CPF',                       type:'text' },
         { id:'autoriza3tel', label:'Telefone',                  type:'text' },
+      ]},
+      { title: 'Autorização de Uso de Imagem', fields: [
+        { type:'info', text:
+          'O COLÉGIO OBJETIVO CAMBOINHAS , a qualquer tempo, efetuar a captura, guarda, manipulação, edição e uso da imagem, voz e tarefas pedagógicas, para fins de identificação, registro de atividades, acervo histórico, uso institucional, educativo e social, incluindo os eventos promovidos pelo colégio CONTRATADO , inclusive todos aqueles descriminados no calendário escolar, para divulgação e exposição nos perfis oficiais e mídias sociais do CONTRATADO , website ou portal da Internet, Intranet, quadro de avisos, Revista e/ou Jornal Escolar ou similar, vídeo para apresentação aos pais e responsáveis legais, entre outros conteúdos que possam ser criados ou produzidos em razão da atividade educacional.\n\nO COLÉGIO OBJETIVO CAMBOINHAS poderá, em caso de atividades pedagógicas remotas, gravar e fazer uso, a título gratuito, do nome, imagem, voz e depoimentos do menor supracitado, bem como sua participação, em ambiente virtual e nas mídias e plataformas digitais (sítio eletrônico, redes sociais, etc.) da instituição escolar, destinadas a divulgação, veiculação e a participação nas aulas e trabalhos remotos, sem quaisquer ônus e restrições, desde que preservada a sua finalidade.\n\nEm nenhuma hipótese, entretanto, poderá a imagem ser utilizada de maneira contrária à moral, aos bons costumes ou a ordem pública. A presente autorização é concedida a título gratuito, abrangendo o uso do nome, da imagem, voz e tarefas pedagógicas mencionadas em todo o território nacional e no exterior, para a divulgação de campanhas promocionais e institucionais internas ou externas. Estou ciente de que o uso de imagem para outros fins que tenham cunho publicitário e/ou promocional será feito sempre por prazo determinado e mediante a assinatura de Termo de Autorização específico assinado previamente pelo CONTRATANTE e regido por seus dispositivos e pela legislação nacional vigente.\n\nNeste ato, tenho ciência e autorizo a coleta, armazenamento e tratamento de dados, sensíveis ou não, no registro das atividades pedagógicas e eventos realizados conforme descrito no calendário escolar, presenciais ou remotas, conforme as diretrizes da política adotada pela CONTRATADA , em observância as disposições contidas na Lei Nº 13709/2020, bem como o compartilhamento dos mesmos, quando necessários, com terceiros parceiros da CONTRATADA no apoio e melhoria na prestação dos serviços educacionais. Declaro ainda ter ciência de que sou livre para solicitar o acesso, a retificação e exclusão destes dados, a qualquer momento, desde que eventual solicitação não conflite com as exigências legais ou impossibilitem a continuidade da prestação do serviço educacional.\n\nPor esta ser a expressão da minha vontade, declaro que autorizo o uso acima descrito, referente ao menor supracitado, sem que nada haja a ser reclamado a título de direitos conexos à imagem, voz, som, tarefas pedagógicas, depoimentos e participações ora autorizados ou a qualquer outro, firmando o presente Termo de Autorização.'
+        },
+        { id:'autorizacao_imagem', label:'Declaração', type:'select', full:true,
+          options:['Autorizo','Não Autorizo'] },
       ]},
       { title: 'Saúde', fields: [
         { id:'aluno_planodesaude',  label:'Plano de saúde',          type:'text' },
@@ -659,7 +679,9 @@ function buildFields(fields) {
   return fields.map(f => {
     const cls = f.full ? 'full' : f.half ? 'half' : '';
     let input;
-    if (f.type === 'select') {
+    if (f.type === 'info') {
+      return `<div class="info-text full">${f.text}</div>`;
+    } else if (f.type === 'select') {
       const opts = f.options.map(o => `<option value="${o}">${o}</option>`).join('');
       input = `<select id="${f.id}" onchange="save('${f.id}',this.value)"><option value="">— selecione —</option>${opts}</select>`;
     } else if (f.type === 'textarea') {
@@ -854,47 +876,47 @@ function buildDoc() {
     ], spacing:{after:120} }),
 
     sectionTitle('2. Filiação 1 — Mãe'),
-    field('Nome', v('filiacao1_nome')),
+    field('Nome', v('f1_nome')),
     new Paragraph({ children:[
-      bold('Nasc.: ',20), normal(fmtDate(v('filiacao1_dtnascimento'))||'__________',20),
-      normal('   CPF: ',20), normal(v('filiacao1_cpf')||'________________',20),
-      normal('   RG: ',20), normal(v('filiacao1_rg')||'______________',20),
+      bold('Nasc.: ',20), normal(fmtDate(v('f1_dtnascimento'))||'__________',20),
+      normal('   CPF: ',20), normal(v('f1_cpf')||'________________',20),
+      normal('   RG: ',20), normal(v('f1_rg')||'______________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Nac.: ',20), normal(v('filiacao1_nacionalidade')||'____________',20),
-      normal('   Est. Civil: ',20), normal(v('filiacao1_civil')||'__________',20),
-      normal('   Ocupação: ',20), normal(v('filiacao1_ocupacao')||'_______________',20),
+      bold('Nac.: ',20), normal(v('f1_nacionalidade')||'____________',20),
+      normal('   Est. Civil: ',20), normal(v('f1_civil')||'__________',20),
+      normal('   Ocupação: ',20), normal(v('f1_ocupacao')||'_______________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Cel: ',20), normal(v('filiacao1_cel')||'______________',20),
-      normal('   Res: ',20), normal(v('filiacao1_residencial')||'______________',20),
-      normal('   Com: ',20), normal(v('filiacao1_comercial')||'______________',20),
+      bold('Cel: ',20), normal(v('f1_cel')||'______________',20),
+      normal('   Res: ',20), normal(v('f1_residencial')||'______________',20),
+      normal('   Com: ',20), normal(v('f1_comercial')||'______________',20),
     ], spacing:{after:60} }),
-    field('E-mail', v('filiacao1_email')),
+    field('E-mail', v('f1_email')),
     new Paragraph({ children:[
-      bold('End.: ',20), normal(`${v('filiacao1_endereco')||'________________________'}  Bairro: ${v('filiacao1_bairro')||'______________'}  Mun.: ${v('filiacao1_municipio')||'___________'}  UF: ${v('filiacao1_uf')||'__'}  CEP: ${v('filiacao1_cep')||'_________'}`,20),
+      bold('End.: ',20), normal(`${v('f1_endereco')||'________________________'}  Bairro: ${v('f1_bairro')||'______________'}  Mun.: ${v('f1_municipio')||'___________'}  UF: ${v('f1_uf')||'__'}  CEP: ${v('f1_cep')||'_________'}`,20),
     ], spacing:{after:120} }),
 
     sectionTitle('3. Filiação 2 — Pai'),
-    field('Nome', v('filiacao2_nome')),
+    field('Nome', v('f2_nome')),
     new Paragraph({ children:[
-      bold('Nasc.: ',20), normal(fmtDate(v('filiacao2_dtnascimento'))||'__________',20),
-      normal('   CPF: ',20), normal(v('filiacao2_cpf')||'________________',20),
-      normal('   RG: ',20), normal(v('filiacao2_rg')||'______________',20),
+      bold('Nasc.: ',20), normal(fmtDate(v('f2_dtnascimento'))||'__________',20),
+      normal('   CPF: ',20), normal(v('f2_cpf')||'________________',20),
+      normal('   RG: ',20), normal(v('f2_rg')||'______________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Nac.: ',20), normal(v('filiacao2_nacionalidade')||'____________',20),
-      normal('   Est. Civil: ',20), normal(v('filiacao2_civil')||'__________',20),
-      normal('   Ocupação: ',20), normal(v('filiacao2_ocupacao')||'_______________',20),
+      bold('Nac.: ',20), normal(v('f2_nacionalidade')||'____________',20),
+      normal('   Est. Civil: ',20), normal(v('f2_civil')||'__________',20),
+      normal('   Ocupação: ',20), normal(v('f2_ocupacao')||'_______________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Cel: ',20), normal(v('filiacao2_cel')||'______________',20),
-      normal('   Res: ',20), normal(v('filiacao2_residencial')||'______________',20),
-      normal('   Com: ',20), normal(v('filiacao2_comercial')||'______________',20),
+      bold('Cel: ',20), normal(v('f2_cel')||'______________',20),
+      normal('   Res: ',20), normal(v('f2_residencial')||'______________',20),
+      normal('   Com: ',20), normal(v('f2_comercial')||'______________',20),
     ], spacing:{after:60} }),
-    field('E-mail', v('filiacao2_email')),
+    field('E-mail', v('f2_email')),
     new Paragraph({ children:[
-      bold('End.: ',20), normal(`${v('filiacao2_endereco')||'________________________'}  Bairro: ${v('filiacao2_bairro')||'______________'}  Mun.: ${v('filiacao2_municipio')||'___________'}  UF: ${v('filiacao2_uf')||'__'}  CEP: ${v('filiacao2_cep')||'_________'}`,20),
+      bold('End.: ',20), normal(`${v('f2_endereco')||'________________________'}  Bairro: ${v('f2_bairro')||'______________'}  Mun.: ${v('f2_municipio')||'___________'}  UF: ${v('f2_uf')||'__'}  CEP: ${v('f2_cep')||'_________'}`,20),
     ], spacing:{after:200} }),
 
     new Paragraph({ children:[ new TextRun({text:`${v('aluno_nomealuno')||'__________________________'} — ${today()}`, size:18, font:'Arial', italics:true })], alignment: AlignmentType.RIGHT, spacing:{after:60} }),
@@ -906,51 +928,51 @@ function buildDoc() {
     new Paragraph({ children:[new PageBreak()], spacing:{after:0} }),
     ...headerBlock(),
     sectionTitle('Responsável Financeiro'),
-    field('Nome', v('respfinanceiro_nome')),
+    field('Nome', v('respf_nome')),
     new Paragraph({ children:[
-      bold('CPF: ',20), normal(v('respfinanceiro_cpf')||'________________',20),
-      normal('   RG: ',20), normal(v('respfinanceiro_rg')||'______________',20),
-      normal('   Exp.: ',20), normal(v('respfinanceiro_expedidor')||'_______',20),
-      normal('   Em.: ',20), normal(fmtDate(v('respfinanceiro_dtemissao'))||'__________',20),
+      bold('CPF: ',20), normal(v('respf_cpf')||'________________',20),
+      normal('   RG: ',20), normal(v('respf_rg')||'______________',20),
+      normal('   Exp.: ',20), normal(v('respf_expedidor')||'_______',20),
+      normal('   Em.: ',20), normal(fmtDate(v('respf_dtemissao'))||'__________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Nasc.: ',20), normal(fmtDate(v('respfinanceiro_dtnascimento'))||'__________',20),
-      normal('   Sexo: ',20), normal(v('respfinanceiro_sexo')||'______',20),
-      normal('   Nac.: ',20), normal(v('respfinanceiro_nacionalidade')||'____________',20),
+      bold('Nasc.: ',20), normal(fmtDate(v('respf_dtnascimento'))||'__________',20),
+      normal('   Sexo: ',20), normal(v('respf_sexo')||'______',20),
+      normal('   Nac.: ',20), normal(v('respf_nacionalidade')||'____________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('Est. Civil: ',20), normal(v('respfinanceiro_estadocivil')||'____________',20),
-      normal('   Ocupação: ',20), normal(v('respfinanceiro_ocupacao')||'______________',20),
-      normal('   Parentesco: ',20), normal(v('respfinanceiro_parentesco')||'________',20),
+      bold('Est. Civil: ',20), normal(v('respf_estadocivil')||'____________',20),
+      normal('   Ocupação: ',20), normal(v('respf_ocupacao')||'______________',20),
+      normal('   Parentesco: ',20), normal(v('respf_parentesco')||'________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('CEP: ',20), normal(v('respfinanceiro_cep')||'_________',20),
-      normal('   UF: ',20), normal(v('respfinanceiro_uf')||'__',20),
-      normal('   Cidade: ',20), normal(v('respfinanceiro_cidade')||'________________',20),
+      bold('CEP: ',20), normal(v('respf_cep')||'_________',20),
+      normal('   UF: ',20), normal(v('respf_uf')||'__',20),
+      normal('   Cidade: ',20), normal(v('respf_cidade')||'________________',20),
     ], spacing:{after:60} }),
-    field('Endereço', `${v('respfinanceiro_endereco')||'__________________________'}  Nº ${v('respfinanceiro_numero')||'_____'}  Bairro: ${v('respfinanceiro_bairro')||'______________'}`),
+    field('Endereço', `${v('respf_endereco')||'__________________________'}  Nº ${v('respf_numero')||'_____'}  Bairro: ${v('respf_bairro')||'______________'}`),
     new Paragraph({ children:[
-      bold('E-mail: ',20), normal(v('respfinanceiro_email')||'__________________________',20),
-      normal('   Cel: ',20), normal(v('respfinanceiro_cel')||'________________',20),
-      normal('   Res: ',20), normal(v('respfinanceiro_residencial')||'________________',20),
+      bold('E-mail: ',20), normal(v('respf_email')||'__________________________',20),
+      normal('   Cel: ',20), normal(v('respf_cel')||'________________',20),
+      normal('   Res: ',20), normal(v('respf_residencial')||'________________',20),
     ], spacing:{after:200} }),
 
     sectionTitle('Responsável Acadêmico'),
-    field('Nome', v('respacademico_nome')),
+    field('Nome', v('respa_nome')),
     new Paragraph({ children:[
-      bold('CPF: ',20), normal(v('respacademico_cpf')||'________________',20),
-      normal('   RG: ',20), normal(v('respacademico_rg')||'______________',20),
-      normal('   Parentesco: ',20), normal(v('respacademico_parentesco')||'_________',20),
+      bold('CPF: ',20), normal(v('respa_cpf')||'________________',20),
+      normal('   RG: ',20), normal(v('respa_rg')||'______________',20),
+      normal('   Parentesco: ',20), normal(v('respa_parentesco')||'_________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
-      bold('CEP: ',20), normal(v('respacademico_cep')||'_________',20),
-      normal('   UF: ',20), normal(v('respacademico_uf')||'__',20),
-      normal('   Cidade: ',20), normal(v('respacademico_cidade')||'________________',20),
+      bold('CEP: ',20), normal(v('respa_cep')||'_________',20),
+      normal('   UF: ',20), normal(v('respa_uf')||'__',20),
+      normal('   Cidade: ',20), normal(v('respa_cidade')||'________________',20),
     ], spacing:{after:60} }),
-    field('Endereço', `${v('respacademico_endereco')||'__________________________'}  Nº ${v('respacademico_numero')||'_____'}  Bairro: ${v('respacademico_bairro')||'______________'}`),
+    field('Endereço', `${v('respa_endereco')||'__________________________'}  Nº ${v('respa_numero')||'_____'}  Bairro: ${v('respa_bairro')||'______________'}`),
     new Paragraph({ children:[
-      bold('E-mail: ',20), normal(v('respacademico_email')||'__________________________',20),
-      normal('   Cel: ',20), normal(v('respacademico_cel')||'________________',20),
+      bold('E-mail: ',20), normal(v('respa_email')||'__________________________',20),
+      normal('   Cel: ',20), normal(v('respa_cel')||'________________',20),
     ], spacing:{after:200} }),
   ];
 
@@ -963,7 +985,7 @@ function buildDoc() {
       alignment: AlignmentType.CENTER, spacing:{after:200}
     }),
     new Paragraph({ children:[
-      bold('Nome do(a) Responsável: ',20), normal(v('respacademico_nome')||v('respfinanceiro_nome')||'__________________________',20),
+      bold('Nome do(a) Responsável: ',20), normal(v('respa_nome')||v('respf_nome')||'__________________________',20),
     ], spacing:{after:60} }),
     new Paragraph({ children:[
       bold('Nome do(a) Aluno(a): ',20), normal(v('aluno_nomealuno')||'__________________________',20),
@@ -987,10 +1009,39 @@ function buildDoc() {
     ], spacing:{after:60} }) : spacer(),
     spacer(),
     new Paragraph({ children:[normal(`${today()}`, 18)], alignment:AlignmentType.RIGHT, spacing:{after:60} }),
-    new Paragraph({ children:[normal(v('respfinanceiro_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
+    new Paragraph({ children:[normal(v('respf_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
   ];
 
-  // ── Section 4: Saúde ─────────────────────────────────────────────────────
+  // ── Section 4: Autorização de Uso de Imagem ──────────────────────────────
+  const imagemAutorizado = v('autorizacao_imagem') || '';
+  const imagemSection = [
+    new Paragraph({ children:[new PageBreak()], spacing:{after:0} }),
+    ...headerBlock(),
+    new Paragraph({
+      children: [new TextRun({ text: 'AUTORIZAÇÃO DE USO DE IMAGEM', bold:true, size:24, color:'1a3a7c', font:'Arial' })],
+      alignment: AlignmentType.CENTER, spacing:{after:200}
+    }),
+    new Paragraph({ children:[
+      bold('Aluno(a): ',20), normal(v('aluno_nomealuno')||'__________________________',20),
+      normal('   Série/Turma: ',20), normal(v('aluno_turma')||'_______',20),
+    ], spacing:{after:160} }),
+    new Paragraph({ children:[small('O COLÉGIO OBJETIVO CAMBOINHAS , a qualquer tempo, efetuar a captura, guarda, manipulação, edição e uso da imagem, voz e tarefas pedagógicas, para fins de identificação, registro de atividades, acervo histórico, uso institucional, educativo e social, incluindo os eventos promovidos pelo colégio CONTRATADO , inclusive todos aqueles descriminados no calendário escolar, para divulgação e exposição nos perfis oficiais e mídias sociais do CONTRATADO , website ou portal da Internet, Intranet, quadro de avisos, Revista e/ou Jornal Escolar ou similar, vídeo para apresentação aos pais e responsáveis legais, entre outros conteúdos que possam ser criados ou produzidos em razão da atividade educacional.')], spacing:{after:120} }),
+    new Paragraph({ children:[small('O COLÉGIO OBJETIVO CAMBOINHAS poderá, em caso de atividades pedagógicas remotas, gravar e fazer uso, a título gratuito, do nome, imagem, voz e depoimentos do menor supracitado, bem como sua participação, em ambiente virtual e nas mídias e plataformas digitais (sítio eletrônico, redes sociais, etc.) da instituição escolar, destinadas a divulgação, veiculação e a participação nas aulas e trabalhos remotos, sem quaisquer ônus e restrições, desde que preservada a sua finalidade.')], spacing:{after:120} }),
+    new Paragraph({ children:[small('Em nenhuma hipótese, entretanto, poderá a imagem ser utilizada de maneira contrária à moral, aos bons costumes ou a ordem pública. A presente autorização é concedida a título gratuito, abrangendo o uso do nome, da imagem, voz e tarefas pedagógicas mencionadas em todo o território nacional e no exterior, para a divulgação de campanhas promocionais e institucionais internas ou externas. Estou ciente de que o uso de imagem para outros fins que tenham cunho publicitário e/ou promocional será feito sempre por prazo determinado e mediante a assinatura de Termo de Autorização específico assinado previamente pelo CONTRATANTE e regido por seus dispositivos e pela legislação nacional vigente.')], spacing:{after:120} }),
+    new Paragraph({ children:[small('Neste ato, tenho ciência e autorizo a coleta, armazenamento e tratamento de dados, sensíveis ou não, no registro das atividades pedagógicas e eventos realizados conforme descrito no calendário escolar, presenciais ou remotas, conforme as diretrizes da política adotada pela CONTRATADA , em observância as disposições contidas na Lei Nº 13709/2020, bem como o compartilhamento dos mesmos, quando necessários, com terceiros parceiros da CONTRATADA no apoio e melhoria na prestação dos serviços educacionais. Declaro ainda ter ciência de que sou livre para solicitar o acesso, a retificação e exclusão destes dados, a qualquer momento, desde que eventual solicitação não conflite com as exigências legais ou impossibilitem a continuidade da prestação do serviço educacional.')], spacing:{after:120} }),
+    new Paragraph({ children:[small('Por esta ser a expressão da minha vontade, declaro que autorizo o uso acima descrito, referente ao menor supracitado, sem que nada haja a ser reclamado a título de direitos conexos à imagem, voz, som, tarefas pedagógicas, depoimentos e participações ora autorizados ou a qualquer outro, firmando o presente Termo de Autorização.')], spacing:{after:200} }),
+    new Paragraph({ children:[
+      new TextRun({ text: `( ${imagemAutorizado === 'Autorizo' ? 'X' : '   '} ) `, font:'Arial', size:22 }),
+      new TextRun({ text: 'AUTORIZO', bold: true, font:'Arial', size:22 }),
+      new TextRun({ text: '          ', font:'Arial', size:22 }),
+      new TextRun({ text: `( ${imagemAutorizado === 'Não Autorizo' ? 'X' : '   '} ) `, font:'Arial', size:22 }),
+      new TextRun({ text: 'NÃO AUTORIZO', bold: true, font:'Arial', size:22 }),
+    ], spacing:{after:240} }),
+    new Paragraph({ children:[normal(today(), 18)], alignment:AlignmentType.RIGHT, spacing:{after:60} }),
+    new Paragraph({ children:[normal(v('respf_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
+  ];
+
+  // ── Section 5: Saúde ─────────────────────────────────────────────────────
   const saudeSection = [
     new Paragraph({ children:[new PageBreak()], spacing:{after:0} }),
     ...headerBlock(),
@@ -1028,7 +1079,7 @@ function buildDoc() {
 
     spacer(),
     new Paragraph({ children:[normal(today(), 18)], alignment:AlignmentType.RIGHT, spacing:{after:60} }),
-    new Paragraph({ children:[normal(v('respacademico_nome')||v('respfinanceiro_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
+    new Paragraph({ children:[normal(v('respa_nome')||v('respf_nome')||'__________________________', 18)], alignment:AlignmentType.RIGHT }),
   ];
 
   // ── Build full document ───────────────────────────────────────────────────
@@ -1045,6 +1096,7 @@ function buildDoc() {
         ...fichaSection,
         ...respSection,
         ...saidaSection,
+        ...imagemSection,
         ...saudeSection,
       ]
     }]
